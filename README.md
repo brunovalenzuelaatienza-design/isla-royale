@@ -52,6 +52,28 @@ Todas las teclas se pueden cambiar en **Configuración → Controles**.
 - **Dominio propio** (opcional): compra uno (unos 10-15 €/año, por ejemplo `mijuego.com`) y añádelo en Render → Settings → Custom Domains. Render pone el certificado HTTPS gratis.
 - **Probar en tu ordenador:** con Node.js instalado, ejecuta `npm install` y luego `npm start`, y abre `http://localhost:3000`. Con `npm test` se simula una partida completa con bots.
 
+## 4b. Personalización, tienda y economía
+
+- **Personalización:** peinados, caras, gorras, máscaras, gafas, ropa, mochilas, accesorios y colores. Se guarda en la cuenta del jugador y los demás lo ven en las partidas. Todo es estético.
+- **Cómo se consiguen los objetos:**
+  - Gratis.
+  - Por nivel, del 2 al 30.
+  - Con monedas.
+  - Viendo anuncios.
+  - Con la recompensa diaria.
+- **Monedas:** se ganan jugando (10 por partida, 5 por eliminación, 25 por quedar entre los 5 últimos y 100 por ganar), al subir de nivel, con misiones, con la recompensa diaria y con anuncios.
+- **Validación:** el servidor valida todas las compras, misiones, recompensas y trajes. Las pruebas están en `node tests/economy-test.js`.
+- **Anuncios con recompensa (Google H5 Games Ads):** se activan con `ADSENSE_CLIENT`.
+  - El servidor da un vale de un solo uso antes de cada anuncio y solo entrega la recompensa cuando el SDK de Google confirma que el anuncio se vio completo (`adViewed`), y nunca antes de 5 segundos.
+  - Hay límites diarios: 5 anuncios de monedas y 10 de objetos.
+  - Google no ofrece verificación servidor a servidor para anuncios web, así que esta confirmación es la que da su SDK en el navegador.
+- **Paquetes de monedas con dinero real (Stripe):** se activan con tres variables:
+  - `STRIPE_SECRET_KEY`
+  - `STRIPE_WEBHOOK_SECRET`
+  - `PUBLIC_URL`, por ejemplo `https://islaroyale.eu`.
+
+  En Stripe hay que crear un webhook hacia `https://TU-DOMINIO/api/stripe/webhook` con el evento `checkout.session.completed`. Las monedas solo se suman cuando llega ese evento con la firma correcta. **Antes de cobrar dinero real usa un plan con disco persistente** (Render Starter + Disk) para que las compras no dependan solo de la copia del navegador.
+
 ## 5. Costes
 
 | Opción | Precio | Qué implica |

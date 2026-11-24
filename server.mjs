@@ -3848,6 +3848,224 @@ var CHARACTERS = [
 ];
 var CHARACTER_IDS = CHARACTERS.map((c) => c.id);
 
+// shared/cosmetics.js
+var SLOTS = [
+  { id: "hair", name: "Peinados", icon: "\u{1F487}", required: true },
+  { id: "face", name: "Caras", icon: "\u{1F600}", required: true },
+  { id: "hat", name: "Gorras y sombreros", icon: "\u{1F9E2}" },
+  { id: "mask", name: "M\xE1scaras", icon: "\u{1F977}" },
+  { id: "glasses", name: "Gafas", icon: "\u{1F576}\uFE0F" },
+  { id: "top", name: "Camisetas y chaquetas", icon: "\u{1F455}", required: true },
+  { id: "pants", name: "Pantalones", icon: "\u{1F456}", required: true },
+  { id: "backpack", name: "Mochilas", icon: "\u{1F392}" },
+  { id: "special", name: "Accesorios especiales", icon: "\u2728" }
+];
+var COLOR_SLOTS = [
+  { id: "skin", name: "Tono de piel", palette: ["#ffdbc2", "#f2c09a", "#e0a878", "#c98d63", "#a26a45", "#7a4b31", "#5a3522"] },
+  { id: "hairColor", name: "Color de pelo", palette: ["#1c1c1c", "#4a2e1c", "#7a4a22", "#c98d4a", "#f2d16b", "#e8e8e8", "#d6334a", "#c77dff", "#3fa9f5", "#5ad67d", "#ff8fc8"] },
+  { id: "topColor", name: "Color de la ropa", palette: ["#e8473f", "#ff8f3f", "#ffd23f", "#5ad67d", "#2fb8c4", "#3f7fe8", "#8a5cf5", "#ff5fa2", "#f5f5f5", "#3a3f4b", "#8b5a2b", "#1f6b45"] },
+  { id: "pantsColor", name: "Color del pantal\xF3n", palette: ["#2f4a7a", "#30343f", "#6b4f2e", "#4d5d3a", "#8a8f99", "#f2e6c9", "#e8473f", "#3f7fe8", "#1c1c1c", "#c77dff"] }
+];
+var I = (slot, style, name, rarity, unlock, tags = []) => ({ id: `${slot}-${style}`, slot, style, name, rarity, unlock, tags });
+var FREE = { type: "free" };
+var LV = (level) => ({ type: "level", level });
+var COINS = (price) => ({ type: "coins", price });
+var ADS = (ads) => ({ type: "ads", ads });
+var DAILY = { type: "daily" };
+var ITEMS = [
+  // peinados
+  I("hair", "short", "Corto cl\xE1sico", "com\xFAn", FREE),
+  I("hair", "spiky", "De punta", "com\xFAn", FREE),
+  I("hair", "ponytail", "Coleta", "com\xFAn", FREE),
+  I("hair", "long", "Melena", "com\xFAn", FREE),
+  I("hair", "buzz", "Rapado", "com\xFAn", FREE),
+  I("hair", "bald", "Calvo", "com\xFAn", FREE),
+  I("hair", "afro", "Afro", "rara", LV(3)),
+  I("hair", "bun", "Mo\xF1o", "rara", LV(6)),
+  I("hair", "curly", "Rizos", "rara", COINS(250), ["popular"]),
+  I("hair", "mohawk", "Cresta", "\xE9pica", COINS(400), ["featured"]),
+  // caras
+  I("face", "happy", "Alegre", "com\xFAn", FREE),
+  I("face", "determined", "Decidido", "com\xFAn", FREE),
+  I("face", "cool", "Chulito", "rara", LV(4)),
+  I("face", "surprised", "Sorprendido", "rara", ADS(1), ["new"]),
+  I("face", "angry", "Furioso", "rara", COINS(150)),
+  I("face", "sleepy", "Dormil\xF3n", "rara", DAILY),
+  // gorras y sombreros
+  I("hat", "beanie", "Gorro de lana", "com\xFAn", FREE),
+  I("hat", "headband", "Cinta deportiva", "com\xFAn", FREE),
+  I("hat", "helmet", "Casco de moto", "com\xFAn", FREE),
+  I("hat", "cap", "Gorra b\xE1sica", "com\xFAn", LV(2)),
+  I("hat", "beret", "Boina", "rara", ADS(2)),
+  I("hat", "chef", "Gorro de chef", "rara", COINS(300)),
+  I("hat", "cowboy", "Sombrero vaquero", "rara", COINS(400), ["popular"]),
+  I("hat", "tophat", "Chistera", "\xE9pica", COINS(650)),
+  I("hat", "viking", "Casco vikingo", "\xE9pica", LV(12)),
+  I("hat", "pirate", "Sombrero pirata", "\xE9pica", LV(18)),
+  I("hat", "propeller", "Gorra con h\xE9lice", "\xE9pica", ADS(3), ["new"]),
+  I("hat", "party", "Gorro de fiesta", "rara", DAILY),
+  I("hat", "crown", "Corona real", "legendaria", LV(25)),
+  I("hat", "astro", "Casco de astronauta", "legendaria", LV(30)),
+  // máscaras
+  I("mask", "bandit", "Pa\xF1uelo de bandido", "com\xFAn", FREE),
+  I("mask", "ninja", "M\xE1scara ninja", "rara", LV(8)),
+  I("mask", "hockey", "M\xE1scara de hockey", "\xE9pica", COINS(500)),
+  I("mask", "fox", "M\xE1scara de zorro", "\xE9pica", ADS(3), ["featured"]),
+  I("mask", "skull", "Calavera", "legendaria", LV(22)),
+  // gafas
+  I("glasses", "round", "Gafas redondas", "com\xFAn", FREE),
+  I("glasses", "goggles", "Gafas de aviador", "com\xFAn", FREE),
+  I("glasses", "sun", "Gafas de sol especiales", "rara", LV(5)),
+  I("glasses", "heart", "Gafas de coraz\xF3n", "rara", ADS(2)),
+  I("glasses", "star", "Gafas de estrella", "\xE9pica", COINS(350), ["popular"]),
+  I("glasses", "pixel", "Gafas pixeladas", "\xE9pica", DAILY),
+  I("glasses", "visor", "Visor cibern\xE9tico", "legendaria", LV(16)),
+  // camisetas y chaquetas
+  I("top", "tshirt", "Camiseta", "com\xFAn", FREE),
+  I("top", "hoodie", "Sudadera con capucha", "com\xFAn", FREE),
+  I("top", "tank", "Camiseta de tirantes", "com\xFAn", FREE),
+  I("top", "jacket", "Chaqueta", "rara", LV(7)),
+  I("top", "jersey", "Camiseta deportiva", "rara", LV(11)),
+  I("top", "hawaiian", "Camisa hawaiana", "rara", ADS(2), ["new"]),
+  I("top", "vest", "Chaleco t\xE1ctico", "\xE9pica", COINS(500)),
+  I("top", "puffer", "Plum\xEDfero", "\xE9pica", COINS(700), ["featured"]),
+  I("top", "suit", "Traje elegante", "\xE9pica", LV(15)),
+  I("top", "astro", "Traje espacial", "legendaria", LV(30)),
+  // pantalones
+  I("pants", "jeans", "Vaqueros", "com\xFAn", FREE),
+  I("pants", "shorts", "Pantal\xF3n corto", "com\xFAn", FREE),
+  I("pants", "joggers", "Ch\xE1ndal", "com\xFAn", FREE),
+  I("pants", "cargo", "Pantal\xF3n cargo", "rara", LV(9)),
+  I("pants", "skirt", "Falda", "rara", COINS(250)),
+  I("pants", "suit", "Pantal\xF3n de traje", "\xE9pica", LV(15)),
+  I("pants", "astro", "Pantal\xF3n espacial", "legendaria", LV(30)),
+  // mochilas
+  I("backpack", "classic", "Mochila cl\xE1sica", "com\xFAn", FREE),
+  I("backpack", "explorer", "Mochila exclusiva de explorador", "\xE9pica", LV(10)),
+  I("backpack", "guitar", "Guitarra", "\xE9pica", COINS(600), ["popular"]),
+  I("backpack", "turtle", "Caparaz\xF3n de tortuga", "\xE9pica", ADS(3)),
+  I("backpack", "jetpack", "Mochila cohete", "legendaria", COINS(900), ["featured", "new"]),
+  I("backpack", "wings", "Alas de \xE1ngel", "legendaria", LV(20)),
+  // especiales
+  I("special", "scarf", "Bufanda", "com\xFAn", FREE),
+  I("special", "headphones", "Cascos de m\xFAsica", "rara", COINS(350)),
+  I("special", "chain", "Medall\xF3n dorado", "rara", ADS(2)),
+  I("special", "cape", "Capa de h\xE9roe", "\xE9pica", LV(14)),
+  I("special", "halo", "Aureola", "legendaria", LV(28))
+];
+var ITEM_BY_ID = Object.fromEntries(ITEMS.map((i) => [i.id, i]));
+var DEFAULT_OUTFIT = {
+  hair: "hair-short",
+  face: "face-happy",
+  hat: null,
+  mask: null,
+  glasses: null,
+  top: "top-tshirt",
+  pants: "pants-jeans",
+  backpack: null,
+  special: null,
+  skin: "#f2c09a",
+  hairColor: "#4a2e1c",
+  topColor: "#e8473f",
+  pantsColor: "#2f4a7a"
+};
+var PRESETS = [
+  { name: "Rocco", outfit: { ...DEFAULT_OUTFIT, hat: "hat-beanie", topColor: "#e8473f" } },
+  { name: "Luna", outfit: { ...DEFAULT_OUTFIT, hair: "hair-ponytail", hairColor: "#c77dff", top: "top-hoodie", topColor: "#8a5cf5", pantsColor: "#30343f", skin: "#ffdbc2" } },
+  { name: "Kiko", outfit: { ...DEFAULT_OUTFIT, hair: "hair-spiky", hairColor: "#1c1c1c", top: "top-tank", topColor: "#5ad67d", pants: "pants-shorts", pantsColor: "#6b4f2e", backpack: "backpack-classic", skin: "#c98d63" } },
+  { name: "Nara", outfit: { ...DEFAULT_OUTFIT, hair: "hair-long", hairColor: "#1c1c1c", hat: "hat-helmet", topColor: "#ff8f3f", pants: "pants-joggers", pantsColor: "#30343f", skin: "#7a4b31", face: "face-determined" } },
+  { name: "Mara", outfit: { ...DEFAULT_OUTFIT, hair: "hair-long", hairColor: "#d6334a", mask: "mask-bandit", top: "top-hoodie", topColor: "#2fb8c4", pantsColor: "#f2e6c9", special: "special-scarf", skin: "#e0a878" } },
+  { name: "Bolt", outfit: { ...DEFAULT_OUTFIT, hair: "hair-buzz", hairColor: "#e8e8e8", glasses: "glasses-goggles", topColor: "#ffd23f", pants: "pants-joggers", pantsColor: "#1c1c1c", skin: "#a26a45", face: "face-determined" } }
+];
+var COLOR_RE = /^#[0-9a-f]{6}$/i;
+function ownsItem(id, level, owned) {
+  const it = ITEM_BY_ID[id];
+  if (!it) return false;
+  if (it.unlock.type === "free") return true;
+  if (it.unlock.type === "level") return level >= it.unlock.level;
+  return Array.isArray(owned) ? owned.includes(id) : !!(owned && owned.has && owned.has(id));
+}
+function sanitizeOutfit(o, level = null, owned = null) {
+  const out = { ...DEFAULT_OUTFIT };
+  if (!o || typeof o !== "object") return out;
+  for (const s of SLOTS) {
+    const v = o[s.id];
+    if (v === null && !s.required) {
+      out[s.id] = null;
+      continue;
+    }
+    const it = ITEM_BY_ID[v];
+    if (!it || it.slot !== s.id) continue;
+    if (level !== null && !ownsItem(v, level, owned)) continue;
+    out[s.id] = v;
+  }
+  for (const c of COLOR_SLOTS) if (typeof o[c.id] === "string" && COLOR_RE.test(o[c.id]) && c.palette.includes(o[c.id].toLowerCase())) out[c.id] = o[c.id].toLowerCase();
+  return out;
+}
+function randomOutfit(rnd = Math.random) {
+  const pick = (a) => a[Math.floor(rnd() * a.length)];
+  const o = { ...DEFAULT_OUTFIT };
+  for (const s of SLOTS) {
+    const opts = ITEMS.filter((i) => i.slot === s.id);
+    o[s.id] = !s.required && rnd() < 0.55 ? null : pick(opts).id;
+  }
+  if (o.mask && o.glasses && rnd() < 0.7) o.glasses = null;
+  for (const c of COLOR_SLOTS) o[c.id] = pick(c.palette);
+  return o;
+}
+function levelReward(level) {
+  return {
+    level,
+    coins: 50 + level * 10 + (level % 5 === 0 ? 150 : 0),
+    items: ITEMS.filter((i) => i.unlock.type === "level" && i.unlock.level === level).map((i) => i.id)
+  };
+}
+function matchCoins({ kills, won, placement }) {
+  return 10 + kills * 5 + (won ? 100 : placement <= 5 ? 25 : 0);
+}
+var MISSIONS = [
+  { id: "play3", text: "Juega 3 partidas", stat: "matches", goal: 3, coins: 80, xp: 150 },
+  { id: "kills5", text: "Consigue 5 eliminaciones", stat: "kills", goal: 5, coins: 100, xp: 200 },
+  { id: "survive10", text: "Sobrevive 10 minutos en total", stat: "survived", goal: 600, coins: 90, xp: 150 },
+  { id: "weapons10", text: "Recoge 10 armas", stat: "weapons", goal: 10, coins: 70, xp: 120 },
+  { id: "win1", text: "Consigue una victoria", stat: "wins", goal: 1, coins: 150, xp: 300 },
+  { id: "damage800", text: "Inflige 800 puntos de da\xF1o", stat: "damage", goal: 800, coins: 90, xp: 160 },
+  { id: "top5x2", text: "Queda 2 veces entre los 5 mejores", stat: "top5", goal: 2, coins: 100, xp: 180 }
+];
+function dayKey(d = /* @__PURE__ */ new Date()) {
+  return d.toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
+}
+function hash(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function missionsForDay(day, profileId) {
+  const ids = MISSIONS.map((m) => m.id).sort((a, b) => hash(day + profileId + a) - hash(day + profileId + b));
+  return ids.slice(0, 3);
+}
+var DAILY_REWARDS = [
+  { coins: 50 },
+  { coins: 60, xp: 100 },
+  { coins: 100 },
+  { item: "glasses-pixel", coins: 50 },
+  { coins: 150 },
+  { coins: 100, xp: 250 },
+  { item: "hat-party", coins: 200 }
+];
+var DAILY_ITEM_FALLBACK = "face-sleepy";
+var AD_COINS = 40;
+var AD_COINS_PER_DAY = 5;
+var AD_ITEMS_PER_DAY = 10;
+var COIN_PACKS = [
+  { id: "pack-s", coins: 500, price: 199, label: "500 monedas" },
+  { id: "pack-m", coins: 1300, price: 499, label: "1.300 monedas", bonus: "+30 %" },
+  { id: "pack-l", coins: 2800, price: 999, label: "2.800 monedas", bonus: "+40 %" }
+];
+
 // server/log.js
 function log(...args) {
   const t = (/* @__PURE__ */ new Date()).toLocaleTimeString("es-ES", { hour12: false });
@@ -3855,12 +4073,17 @@ function log(...args) {
 }
 
 // server/profiles.js
+var MIN_AD_MS = 5e3;
+var AD_TOKEN_TTL = 10 * 60 * 1e3;
+var START_COINS = 150;
 var ProfileStore = class _ProfileStore {
   constructor(dir) {
     this.dir = dir;
     this.file = path.join(dir, "profiles.json");
     this.data = {};
     this.saveTimer = null;
+    this.adTokens = /* @__PURE__ */ new Map();
+    this.pendingDouble = /* @__PURE__ */ new Map();
     try {
       fs.mkdirSync(dir, { recursive: true });
       if (fs.existsSync(this.file)) this.data = JSON.parse(fs.readFileSync(this.file, "utf8")) || {};
@@ -3875,6 +4098,7 @@ var ProfileStore = class _ProfileStore {
       }
       this.data = {};
     }
+    for (const p of Object.values(this.data)) this._migrate(p);
   }
   _localSecret() {
     const f = path.join(this.dir, "secret.key");
@@ -3889,15 +4113,38 @@ var ProfileStore = class _ProfileStore {
     }
     return k;
   }
+  // ------------------------------------------------------------------ copia firmada del progreso
   sign(p) {
-    const { id, name, character, xp, matches, wins, kills, deaths, damage, top5, timePlayed, bestKills, byMode, created } = p;
-    const body = Buffer.from(JSON.stringify({ id, name, character, xp, matches, wins, kills, deaths, damage, top5, timePlayed, bestKills, byMode, created })).toString("base64url");
+    const keys = [
+      "id",
+      "name",
+      "xp",
+      "matches",
+      "wins",
+      "kills",
+      "deaths",
+      "damage",
+      "top5",
+      "timePlayed",
+      "bestKills",
+      "byMode",
+      "created",
+      "coins",
+      "owned",
+      "outfit",
+      "daily",
+      "ads",
+      "rev",
+      "purchases"
+    ];
+    const obj = {};
+    for (const k of keys) obj[k] = p[k];
+    const body = Buffer.from(JSON.stringify(obj)).toString("base64url");
     const mac = crypto.createHmac("sha256", this.secret).update(body).digest("base64url");
     return body + "." + mac;
   }
-  // Recupera un perfil desde la copia firmada del navegador (si es válida y más reciente que la del servidor)
   restore(token) {
-    if (typeof token !== "string" || token.length > 8e3) return null;
+    if (typeof token !== "string" || token.length > 2e4) return null;
     const [body, mac] = token.split(".");
     if (!body || !mac) return null;
     const expect = crypto.createHmac("sha256", this.secret).update(body).digest("base64url");
@@ -3910,9 +4157,10 @@ var ProfileStore = class _ProfileStore {
     }
     if (!d || typeof d.id !== "string") return null;
     const cur = this.data[d.id];
-    if (cur && cur.xp >= d.xp) return cur;
+    if (cur && ((cur.rev || 0) >= (d.rev || 0) || cur.xp > d.xp)) return cur;
     const base = this._blank(d.name, d.id);
     const p = { ...base, ...d, name: _ProfileStore.sanitizeName(d.name), byMode: { ...base.byMode, ...d.byMode || {} }, lastSeen: Date.now() };
+    this._migrate(p);
     this.data[d.id] = p;
     this.save();
     return p;
@@ -3929,10 +4177,10 @@ var ProfileStore = class _ProfileStore {
     return p;
   }
   _blank(name, id) {
+    const preset = PRESETS[Math.floor(Math.random() * PRESETS.length)];
     return {
       id,
       name: _ProfileStore.sanitizeName(name),
-      character: "rocco",
       xp: 0,
       matches: 0,
       wins: 0,
@@ -3944,8 +4192,31 @@ var ProfileStore = class _ProfileStore {
       bestKills: 0,
       byMode: { solo: { matches: 0, wins: 0, kills: 0 }, duos: { matches: 0, wins: 0, kills: 0 }, squads: { matches: 0, wins: 0, kills: 0 } },
       created: Date.now(),
-      lastSeen: Date.now()
+      lastSeen: Date.now(),
+      coins: START_COINS,
+      owned: [],
+      outfit: { ...preset.outfit },
+      missions: null,
+      daily: { last: null, streak: 0 },
+      ads: { day: null, coins: 0, items: 0, progress: {} },
+      rev: 0,
+      purchases: []
     };
+  }
+  // Perfiles antiguos (antes de la personalización) reciben los campos nuevos
+  _migrate(p) {
+    if (typeof p.coins !== "number") p.coins = START_COINS;
+    if (!Array.isArray(p.owned)) p.owned = [];
+    if (!p.outfit) {
+      const old = CHARACTERS.find((c) => c.id === p.character);
+      const preset = old && PRESETS.find((x) => x.name === old.name);
+      p.outfit = { ...preset ? preset.outfit : DEFAULT_OUTFIT };
+    }
+    if (!p.daily) p.daily = { last: null, streak: 0 };
+    if (!p.ads) p.ads = { day: null, coins: 0, items: 0, progress: {} };
+    if (!Array.isArray(p.purchases)) p.purchases = [];
+    if (typeof p.rev !== "number") p.rev = 0;
+    p.owned = p.owned.filter((id) => ITEM_BY_ID[id]);
   }
   get(id) {
     return typeof id === "string" ? this.data[id] || null : null;
@@ -3956,29 +4227,34 @@ var ProfileStore = class _ProfileStore {
     p.lastSeen = Date.now();
     return p;
   }
+  touch(p) {
+    p.rev = (p.rev || 0) + 1;
+    this.save();
+  }
+  level(p) {
+    return levelFromXp(p.xp).level;
+  }
   setName(id, name) {
     const p = this.get(id);
     if (p) {
       p.name = _ProfileStore.sanitizeName(name);
-      this.save();
+      this.touch(p);
     }
     return p;
   }
-  setCharacter(id, charId) {
-    const p = this.get(id);
-    if (!p || !CHARACTER_IDS.includes(charId)) return false;
-    const def = CHARACTERS.find((c) => c.id === charId);
-    if (levelFromXp(p.xp).level < def.unlock) return false;
-    p.character = charId;
-    this.save();
-    return true;
+  // Traje que se usa en las partidas (solo piezas desbloqueadas)
+  outfitFor(p) {
+    return sanitizeOutfit(p.outfit, this.level(p), p.owned);
   }
+  // ------------------------------------------------------------------ vista pública (lo que recibe el cliente)
   publicView(p) {
     const lv = levelFromXp(p.xp);
+    this._ensureMissions(p);
+    this._ensureAdDay(p);
+    const today = dayKey();
     return {
       id: p.id,
       name: p.name,
-      character: p.character,
       xp: p.xp,
       level: lv.level,
       levelXp: lv.into,
@@ -3992,27 +4268,46 @@ var ProfileStore = class _ProfileStore {
       timePlayed: Math.round(p.timePlayed),
       bestKills: p.bestKills,
       byMode: p.byMode,
-      unlocked: CHARACTERS.filter((c) => c.unlock <= lv.level).map((c) => c.id),
+      coins: p.coins,
+      owned: p.owned,
+      outfit: this.outfitFor(p),
+      missions: { day: p.missions.day, list: p.missions.list.map((m) => ({ ...m, ...MISSIONS.find((x) => x.id === m.id) })) },
+      daily: { claimedToday: p.daily.last === today, streak: p.daily.streak, nextIndex: this._dailyIndex(p) },
+      ads: { coinsLeft: Math.max(0, AD_COINS_PER_DAY - p.ads.coins), itemsLeft: Math.max(0, AD_ITEMS_PER_DAY - p.ads.items), progress: p.ads.progress },
       token: this.sign(p)
     };
   }
+  // ------------------------------------------------------------------ experiencia y niveles
+  _addXp(p, amount) {
+    const before = this.level(p);
+    p.xp += Math.max(0, Math.round(amount));
+    const after = this.level(p);
+    const rewards = [];
+    for (let l = before + 1; l <= after; l++) {
+      const r = levelReward(l);
+      p.coins += r.coins;
+      rewards.push({ level: l, coins: r.coins, items: r.items });
+    }
+    return rewards;
+  }
+  // ------------------------------------------------------------------ resultado de una partida
   recordMatch(id, r) {
     const p = this.get(id);
     if (!p) return null;
-    const before = levelFromXp(p.xp).level;
+    const before = this.level(p);
     const breakdown = [];
     breakdown.push(["Partida jugada", XP_RULES.perMatch]);
     if (r.kills) breakdown.push([`Eliminaciones (${r.kills})`, r.kills * XP_RULES.perKill]);
     const surv = Math.round(r.survived * XP_RULES.perSecondAlive);
     if (surv) breakdown.push(["Tiempo de supervivencia", surv]);
     if (r.won) breakdown.push(["\xA1Victoria!", XP_RULES.win]);
-    else if (r.placement <= 5 && !r.abandoned) breakdown.push(["Top 5", XP_RULES.top5]);
+    else if (r.placement <= 5 && !r.abandoned) breakdown.push(["Entre los 5 \xFAltimos supervivientes", XP_RULES.top5]);
     const xp = breakdown.reduce((a, b) => a + b[1], 0);
-    p.xp += xp;
     p.matches++;
     if (r.won) p.wins++;
     else p.deaths++;
-    if (r.placement <= 5 || r.won) p.top5++;
+    const top5 = r.won || r.placement <= 5 && !r.abandoned;
+    if (top5) p.top5++;
     p.kills += r.kills;
     p.damage += r.damage;
     p.timePlayed += r.survived;
@@ -4021,21 +4316,186 @@ var ProfileStore = class _ProfileStore {
     bm.matches++;
     bm.kills += r.kills;
     if (r.won) bm.wins++;
-    this.pendingDouble = this.pendingDouble || /* @__PURE__ */ new Map();
+    const coins = r.abandoned ? 0 : matchCoins({ kills: r.kills, won: r.won, placement: r.placement });
+    p.coins += coins;
+    this._ensureMissions(p);
+    const stats = { matches: 1, kills: r.kills, survived: Math.round(r.survived), weapons: r.weapons || 0, wins: r.won ? 1 : 0, damage: r.damage, top5: top5 ? 1 : 0 };
+    for (const m of p.missions.list) {
+      const def = MISSIONS.find((x) => x.id === m.id);
+      if (def && !m.claimed) m.progress = Math.min(def.goal, m.progress + (stats[def.stat] || 0));
+    }
+    const levelRewards = this._addXp(p, xp);
     if (!r.abandoned) this.pendingDouble.set(p.id, { xp, until: Date.now() + 10 * 60 * 1e3 });
-    const after = levelFromXp(p.xp).level;
-    const newChars = CHARACTERS.filter((c) => c.unlock > before && c.unlock <= after).map((c) => c.name);
-    this.save();
-    return { xp, breakdown, profile: this.publicView(p), placement: r.won ? 1 : r.placement, survived: r.survived, levelUp: after > before ? after : 0, newChars };
+    this.touch(p);
+    const after = this.level(p);
+    return { xp, coins, breakdown, profile: this.publicView(p), placement: r.won ? 1 : r.placement, survived: r.survived, levelUp: after > before ? after : 0, levelRewards, newChars: [] };
   }
-  claimDouble(id) {
+  // ------------------------------------------------------------------ personalización y tienda
+  setOutfit(id, outfit) {
     const p = this.get(id);
-    const pend = this.pendingDouble && this.pendingDouble.get(id);
-    if (!p || !pend || pend.until < Date.now()) return null;
-    this.pendingDouble.delete(id);
-    p.xp += pend.xp;
-    this.save();
-    return { bonus: pend.xp, profile: this.publicView(p) };
+    if (!p) return { error: "Perfil no encontrado." };
+    if (!outfit || typeof outfit !== "object") return { error: "Traje no v\xE1lido." };
+    const level = this.level(p);
+    for (const s of SLOTS) {
+      const v = outfit[s.id];
+      if (v === null || v === void 0) {
+        if (s.required) return { error: "Falta una pieza obligatoria." };
+        continue;
+      }
+      const it = ITEM_BY_ID[v];
+      if (!it || it.slot !== s.id) return { error: "Pieza no v\xE1lida." };
+      if (!ownsItem(v, level, p.owned)) return { error: `A\xFAn no tienes \xAB${it.name}\xBB.` };
+    }
+    p.outfit = sanitizeOutfit(outfit, level, p.owned);
+    this.touch(p);
+    return { ok: true };
+  }
+  buyItem(id, itemId) {
+    const p = this.get(id);
+    const it = ITEM_BY_ID[itemId];
+    if (!p || !it) return { error: "Objeto no encontrado." };
+    if (ownsItem(itemId, this.level(p), p.owned)) return { error: "Ya tienes este objeto." };
+    if (it.unlock.type !== "coins") return { error: "Este objeto no se vende con monedas." };
+    if (p.coins < it.unlock.price) return { error: `Te faltan ${it.unlock.price - p.coins} monedas.` };
+    p.coins -= it.unlock.price;
+    p.owned.push(itemId);
+    this.touch(p);
+    return { ok: true, reward: { title: `\xA1Has conseguido \xAB${it.name}\xBB!`, items: [itemId] } };
+  }
+  // ------------------------------------------------------------------ misiones diarias
+  _ensureMissions(p) {
+    const day = dayKey();
+    if (!p.missions || p.missions.day !== day) p.missions = { day, list: missionsForDay(day, p.id).map((mid) => ({ id: mid, progress: 0, claimed: false })) };
+  }
+  claimMission(id, missionId) {
+    const p = this.get(id);
+    if (!p) return { error: "Perfil no encontrado." };
+    this._ensureMissions(p);
+    const m = p.missions.list.find((x) => x.id === missionId);
+    const def = MISSIONS.find((x) => x.id === missionId);
+    if (!m || !def) return { error: "Misi\xF3n no encontrada." };
+    if (m.claimed) return { error: "Ya has cobrado esta misi\xF3n." };
+    if (m.progress < def.goal) return { error: "La misi\xF3n a\xFAn no est\xE1 completada." };
+    m.claimed = true;
+    p.coins += def.coins;
+    const levelRewards = this._addXp(p, def.xp);
+    this.touch(p);
+    return { ok: true, reward: { title: "Misi\xF3n completada", coins: def.coins, xp: def.xp, levelRewards } };
+  }
+  // ------------------------------------------------------------------ recompensa diaria
+  _dailyIndex(p) {
+    const today = dayKey();
+    const yesterday = dayKey(new Date(Date.now() - 24 * 3600 * 1e3));
+    if (p.daily.last === today) return (p.daily.streak - 1) % DAILY_REWARDS.length;
+    const streak = p.daily.last === yesterday ? p.daily.streak + 1 : 1;
+    return (streak - 1) % DAILY_REWARDS.length;
+  }
+  claimDaily(id) {
+    const p = this.get(id);
+    if (!p) return { error: "Perfil no encontrado." };
+    const today = dayKey();
+    if (p.daily.last === today) return { error: "Ya has recogido la recompensa de hoy. \xA1Vuelve ma\xF1ana!" };
+    const yesterday = dayKey(new Date(Date.now() - 24 * 3600 * 1e3));
+    p.daily.streak = p.daily.last === yesterday ? p.daily.streak + 1 : 1;
+    p.daily.last = today;
+    const r = DAILY_REWARDS[(p.daily.streak - 1) % DAILY_REWARDS.length];
+    let coins = r.coins || 0;
+    const items = [];
+    if (r.item) {
+      let item = r.item;
+      if (p.owned.includes(item)) item = p.owned.includes(DAILY_ITEM_FALLBACK) ? null : DAILY_ITEM_FALLBACK;
+      if (item) {
+        p.owned.push(item);
+        items.push(item);
+      } else coins += 100;
+    }
+    p.coins += coins;
+    const levelRewards = r.xp ? this._addXp(p, r.xp) : [];
+    this.touch(p);
+    return { ok: true, reward: { title: `Recompensa diaria \xB7 d\xEDa ${(p.daily.streak - 1) % 7 + 1}`, coins, xp: r.xp || 0, items, levelRewards } };
+  }
+  // ------------------------------------------------------------------ anuncios con recompensa
+  _ensureAdDay(p) {
+    const day = dayKey();
+    if (p.ads.day !== day) {
+      p.ads.day = day;
+      p.ads.coins = 0;
+      p.ads.items = 0;
+    }
+  }
+  // El servidor entrega un vale de un solo uso antes de mostrar el anuncio.
+  startAd(id, kind, itemId) {
+    const p = this.get(id);
+    if (!p) return { error: "Perfil no encontrado." };
+    this._ensureAdDay(p);
+    if (kind === "coins") {
+      if (p.ads.coins >= AD_COINS_PER_DAY) return { error: "Has llegado al l\xEDmite de monedas por anuncios de hoy." };
+    } else if (kind === "item") {
+      const it = ITEM_BY_ID[itemId];
+      if (!it || it.unlock.type !== "ads") return { error: "Este objeto no se consigue con anuncios." };
+      if (p.owned.includes(itemId)) return { error: "Ya tienes este objeto." };
+      if (p.ads.items >= AD_ITEMS_PER_DAY) return { error: "Has llegado al l\xEDmite de anuncios de hoy." };
+    } else if (kind === "doublexp") {
+      const pend = this.pendingDouble.get(p.id);
+      if (!pend || pend.until < Date.now()) return { error: "Ya no hay experiencia que duplicar." };
+    } else return { error: "Tipo de recompensa desconocido." };
+    for (const [k, v] of this.adTokens) if (Date.now() - v.t0 > AD_TOKEN_TTL) this.adTokens.delete(k);
+    for (const [k, v] of this.adTokens) if (v.pid === p.id) this.adTokens.delete(k);
+    const token = crypto.randomBytes(16).toString("hex");
+    this.adTokens.set(token, { pid: p.id, kind, itemId: kind === "item" ? itemId : null, t0: Date.now() });
+    return { ok: true, token };
+  }
+  // Se llama cuando el SDK de anuncios confirma que el anuncio se vio completo (adViewed).
+  finishAd(id, token) {
+    const v = this.adTokens.get(token);
+    if (!v || v.pid !== id) return { error: "Vale de anuncio no v\xE1lido o caducado." };
+    this.adTokens.delete(token);
+    if (Date.now() - v.t0 < MIN_AD_MS) return { error: "El anuncio no se complet\xF3." };
+    const p = this.get(id);
+    if (!p) return { error: "Perfil no encontrado." };
+    this._ensureAdDay(p);
+    if (v.kind === "coins") {
+      if (p.ads.coins >= AD_COINS_PER_DAY) return { error: "L\xEDmite diario alcanzado." };
+      p.ads.coins++;
+      p.coins += AD_COINS;
+      this.touch(p);
+      return { ok: true, reward: { title: "Gracias por ver el anuncio", coins: AD_COINS } };
+    }
+    if (v.kind === "item") {
+      const it = ITEM_BY_ID[v.itemId];
+      if (!it || p.owned.includes(v.itemId)) return { error: "Ya tienes este objeto." };
+      p.ads.items++;
+      p.ads.progress[v.itemId] = (p.ads.progress[v.itemId] || 0) + 1;
+      const done = p.ads.progress[v.itemId] >= it.unlock.ads;
+      if (done) {
+        p.owned.push(v.itemId);
+        delete p.ads.progress[v.itemId];
+      }
+      this.touch(p);
+      return { ok: true, reward: done ? { title: `\xA1Has desbloqueado \xAB${it.name}\xBB!`, items: [v.itemId] } : { title: `Anuncio ${p.ads.progress[v.itemId]}/${it.unlock.ads} para \xAB${it.name}\xBB` } };
+    }
+    if (v.kind === "doublexp") {
+      const pend = this.pendingDouble.get(p.id);
+      if (!pend || pend.until < Date.now()) return { error: "Ya no hay experiencia que duplicar." };
+      this.pendingDouble.delete(p.id);
+      const levelRewards = this._addXp(p, pend.xp);
+      this.touch(p);
+      return { ok: true, bonus: pend.xp, reward: { title: "Experiencia duplicada", xp: pend.xp, levelRewards } };
+    }
+    return { error: "Recompensa desconocida." };
+  }
+  // ------------------------------------------------------------------ compras con dinero real (las confirma Stripe)
+  creditPurchase(profileId, packId, sessionId) {
+    const p = this.get(profileId);
+    const pack = COIN_PACKS.find((x) => x.id === packId);
+    if (!p || !pack) return null;
+    if (p.purchases.includes(sessionId)) return null;
+    p.purchases.push(sessionId);
+    p.coins += pack.coins;
+    this.touch(p);
+    this.flush();
+    log(`Compra acreditada: ${p.name} +${pack.coins} monedas (${sessionId})`);
+    return { profile: this.publicView(p), coins: pack.coins };
   }
   save() {
     if (this.saveTimer) return;
@@ -5632,11 +6092,11 @@ var Match = class {
       if (!spawn) spawn = this.nav.randomFreeNear(this.rng, 160, 160, 140, 100) || { x: 160, y: 160 };
       teamSpawns.push(spawn);
       const members = [];
-      for (const h of e.humans) members.push(this._addPlayer({ team, name: h.profile.name, char: h.profile.character, conn: h.conn, profileId: h.profile.id, spawn }));
+      for (const h of e.humans) members.push(this._addPlayer({ team, name: h.profile.name, outfit: this.profiles.outfitFor(h.profile), conn: h.conn, profileId: h.profile.id, spawn }));
       for (let i = 0; i < e.bots; i++) {
         const level = this._pickBotLevel();
         const name = BotController.randomName(this.usedNames || (this.usedNames = /* @__PURE__ */ new Set()));
-        const p = this._addPlayer({ team, name, char: BotController.randomCharacter(), conn: null, spawn });
+        const p = this._addPlayer({ team, name, outfit: randomOutfit(), conn: null, spawn });
         p.bot = new BotController(this, p, level);
         members.push(p);
       }
@@ -5648,7 +6108,7 @@ var Match = class {
     const r = this.rng();
     return r < 0.4 ? "easy" : r < 0.88 ? "normal" : "hard";
   }
-  _addPlayer({ team, name, char, conn, profileId = null, spawn }) {
+  _addPlayer({ team, name, outfit, conn, profileId = null, spawn }) {
     const id = this.nextPlayerId++;
     let pos = null;
     for (let i = 0; i < 40 && !pos; i++) {
@@ -5660,10 +6120,11 @@ var Match = class {
       id,
       team,
       name,
-      char,
+      outfit,
       conn,
       profileId,
       bot: null,
+      weaponsPicked: 0,
       x: pos.x,
       y: pos.y,
       z: 0,
@@ -5773,7 +6234,7 @@ var Match = class {
       you: p.id,
       seed: this.map.seed,
       countdown: -this.time,
-      players: [...this.players.values()].map((q) => ({ id: q.id, name: q.name, char: q.char, team: q.team, bot: !!q.bot && !q.wasHuman })),
+      players: [...this.players.values()].map((q) => ({ id: q.id, name: q.name, outfit: q.outfit, team: q.team, bot: !!q.bot && !q.wasHuman })),
       loot: [...this.loot.values()].map(packItem),
       crates: this.map.crates.filter((c) => !c.alive).map((c) => c.id),
       zone: this._zoneMsg()
@@ -6142,6 +6603,7 @@ var Match = class {
         this.addLoot({ kind: "weapon", type: old.type, mag: old.mag, x: p.x + (this.rng() - 0.5), y: p.y + (this.rng() - 0.5) }, true);
       }
       p.weapons[slot] = { type: it.type, mag: it.mag };
+      p.weaponsPicked++;
       p.slot = slot;
       p.reloading = 0;
       p.fireCd = Math.max(p.fireCd, 0.2);
@@ -6299,13 +6761,14 @@ var Match = class {
       damage: Math.round(p.damage),
       survived,
       placement,
-      abandoned
+      abandoned,
+      weapons: p.weaponsPicked
     });
   }
   _sendResult(p, won) {
     const res = this._recordResult(p, won);
     if (!res || !p.conn) return;
-    const teammates = [...this.players.values()].filter((q) => q.team === p.team).map((q) => ({ name: q.name, kills: q.kills, damage: Math.round(q.damage), alive: q.alive, char: q.char }));
+    const teammates = [...this.players.values()].filter((q) => q.team === p.team).map((q) => ({ name: q.name, kills: q.kills, damage: Math.round(q.damage), alive: q.alive }));
     p.conn.sendJson({
       t: "result",
       won,
@@ -6317,11 +6780,12 @@ var Match = class {
       xpBreakdown: res.breakdown,
       profile: res.profile,
       levelUp: res.levelUp,
-      newChars: res.newChars,
+      levelRewards: res.levelRewards,
+      coins: res.coins,
       teammates,
       total: this.players.size,
       mode: this.mode,
-      char: p.char,
+      outfit: p.outfit,
       name: p.name,
       leaderboard: this._leaderboard()
     });
@@ -6447,7 +6911,7 @@ var Matchmaker = class {
         mode: party.mode,
         private: !!party.private,
         leader: party.leader.profile.id,
-        members: party.members.map((m) => ({ id: m.profile.id, name: m.profile.name, character: m.profile.character, level: this.profiles.publicView(m.profile).level, state: m.state }))
+        members: party.members.map((m) => ({ id: m.profile.id, name: m.profile.name, outfit: this.profiles.outfitFor(m.profile), level: this.profiles.level(m.profile), state: m.state }))
       }
     };
     for (const m of party.members) m.sendJson(msg);
@@ -6597,6 +7061,53 @@ var Matchmaker = class {
   }
 };
 
+// server/payments.js
+import crypto3 from "crypto";
+var KEY = process.env.STRIPE_SECRET_KEY || "";
+var WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || "";
+var PUBLIC_URL = (process.env.PUBLIC_URL || "").replace(/\/$/, "");
+var paymentsEnabled = () => !!(KEY && WEBHOOK_SECRET && PUBLIC_URL);
+async function createCheckout(profile, packId) {
+  const pack = COIN_PACKS.find((p) => p.id === packId);
+  if (!pack) throw new Error("Paquete no v\xE1lido");
+  const form = new URLSearchParams({
+    mode: "payment",
+    success_url: `${PUBLIC_URL}/?compra=ok`,
+    cancel_url: `${PUBLIC_URL}/?compra=cancelada`,
+    "line_items[0][quantity]": "1",
+    "line_items[0][price_data][currency]": "eur",
+    "line_items[0][price_data][unit_amount]": String(pack.price),
+    "line_items[0][price_data][product_data][name]": `Isla Royale \xB7 ${pack.label}`,
+    "metadata[profile_id]": profile.id,
+    "metadata[pack_id]": pack.id,
+    client_reference_id: profile.id
+  });
+  const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${KEY}`, "Content-Type": "application/x-www-form-urlencoded" },
+    body: form
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error?.message || "Error de Stripe");
+  return data.url;
+}
+function verifyWebhook(rawBody, header, secret = WEBHOOK_SECRET, toleranceSec = 300) {
+  if (!secret || !header) return null;
+  const parts = Object.fromEntries(String(header).split(",").map((kv) => kv.split("=").map((s) => s.trim())).filter((x) => x.length === 2));
+  const t = Number(parts.t);
+  const sigs = String(header).split(",").filter((x) => x.trim().startsWith("v1=")).map((x) => x.trim().slice(3));
+  if (!t || !sigs.length) return null;
+  if (Math.abs(Date.now() / 1e3 - t) > toleranceSec) return null;
+  const expected = crypto3.createHmac("sha256", secret).update(`${t}.${rawBody}`).digest("hex");
+  const ok = sigs.some((s) => s.length === expected.length && crypto3.timingSafeEqual(Buffer.from(s), Buffer.from(expected)));
+  if (!ok) return null;
+  try {
+    return JSON.parse(rawBody);
+  } catch {
+    return null;
+  }
+}
+
 // server/index.js
 var __dirname = path2.dirname(fileURLToPath(import.meta.url));
 var ROOT = path2.resolve(__dirname, "..");
@@ -6629,7 +7140,33 @@ var server = http.createServer((req, res) => {
     if (url === "/") url = "/index.html";
     if (url === "/api/config") {
       res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" });
-      return res.end(JSON.stringify({ adsClient: ADS_CLIENT, adsTest: ADS_TEST }));
+      return res.end(JSON.stringify({ adsClient: ADS_CLIENT, adsTest: ADS_TEST, payments: paymentsEnabled() }));
+    }
+    if (url === "/api/stripe/webhook" && req.method === "POST") {
+      let raw = "";
+      req.on("data", (d) => {
+        raw += d;
+        if (raw.length > 1e6) req.destroy();
+      });
+      req.on("end", () => {
+        const ev = verifyWebhook(raw, req.headers["stripe-signature"]);
+        if (!ev) {
+          res.writeHead(400);
+          return res.end("firma no v\xE1lida");
+        }
+        if (ev.type === "checkout.session.completed" && ev.data?.object?.payment_status === "paid") {
+          const s = ev.data.object;
+          const r = profiles.creditPurchase(s.metadata?.profile_id, s.metadata?.pack_id, s.id);
+          const c = r && online.get(s.metadata.profile_id);
+          if (c) {
+            c.sendJson({ t: "profile", profile: r.profile });
+            c.sendJson({ t: "reward", reward: { title: "\xA1Compra completada!", coins: r.coins } });
+          }
+        }
+        res.writeHead(200);
+        res.end("ok");
+      });
+      return;
     }
     if (url === "/ads.txt") {
       res.writeHead(ADS_CLIENT ? 200 : 404, { "Content-Type": "text/plain" });
@@ -6748,19 +7285,46 @@ function handle(c, msg) {
       c.sendJson({ t: "profile", profile: profiles.publicView(p) });
       if (c.party) mm.broadcastParty(c.party);
       break;
-    case "setChar":
-      if (!profiles.setCharacter(p.id, msg.id)) c.sendJson({ t: "error", msg: "Ese personaje a\xFAn est\xE1 bloqueado." });
-      c.sendJson({ t: "profile", profile: profiles.publicView(p) });
+    case "setOutfit":
+      econ(c, p, profiles.setOutfit(p.id, msg.outfit), "Apariencia guardada");
       if (c.party) mm.broadcastParty(c.party);
       break;
+    case "buy":
+      econ(c, p, profiles.buyItem(p.id, String(msg.id)));
+      break;
+    case "claimMission":
+      econ(c, p, profiles.claimMission(p.id, String(msg.id)));
+      break;
+    case "claimDaily":
+      econ(c, p, profiles.claimDaily(p.id));
+      break;
+    case "adStart": {
+      if (!ADS_CLIENT) {
+        c.sendJson({ t: "error", msg: "Los anuncios a\xFAn no est\xE1n activados en este servidor." });
+        break;
+      }
+      const r = profiles.startAd(p.id, String(msg.kind), msg.id ? String(msg.id) : null);
+      if (r.error) c.sendJson({ t: "error", msg: r.error, ad: true });
+      else c.sendJson({ t: "adToken", token: r.token, kind: msg.kind, id: msg.id || null, req: msg.req });
+      break;
+    }
+    case "adDone": {
+      const r = profiles.finishAd(p.id, String(msg.token));
+      if (r.bonus) c.sendJson({ t: "doubled", bonus: r.bonus, profile: profiles.publicView(p) });
+      econ(c, p, r);
+      break;
+    }
+    case "buyPack": {
+      if (!paymentsEnabled()) {
+        c.sendJson({ t: "error", msg: "Las compras a\xFAn no est\xE1n activadas." });
+        break;
+      }
+      createCheckout(p, String(msg.id)).then((url) => c.sendJson({ t: "checkout", url })).catch((e) => c.sendJson({ t: "error", msg: "No se pudo abrir el pago: " + e.message }));
+      break;
+    }
     case "profile":
       c.sendJson({ t: "profile", profile: profiles.publicView(p) });
       break;
-    case "claimDouble": {
-      const r = profiles.claimDouble(p.id);
-      if (r) c.sendJson({ t: "doubled", bonus: r.bonus, profile: r.profile });
-      break;
-    }
     case "queue":
       if (c.state === "lobby") mm.queue(c, msg.mode, msg.bots);
       break;
@@ -6787,6 +7351,13 @@ function handle(c, msg) {
       c.sendJson({ t: "profile", profile: profiles.publicView(p) });
       break;
   }
+}
+function econ(c, p, r, okMsg) {
+  if (!r) return;
+  if (r.error) return c.sendJson({ t: "error", msg: r.error });
+  c.sendJson({ t: "profile", profile: profiles.publicView(p) });
+  if (r.reward) c.sendJson({ t: "reward", reward: r.reward });
+  else if (okMsg) c.sendJson({ t: "info", msg: okMsg });
 }
 var stepMs = 1e3 / TICK_RATE;
 var next = performance.now();

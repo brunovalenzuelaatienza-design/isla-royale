@@ -290,6 +290,115 @@ th { color: var(--muted); font-size: 13px; }
 .legalLink { position: absolute; bottom: 8px; left: 18px; color: rgba(255,255,255,.75); font-size: 12px; text-decoration: none; text-shadow: 0 1px 0 rgba(0,0,0,.4); }
 .legalLink:hover { color: #fff; text-decoration: underline; }
 .xpLine.bonus b { color: var(--yellow); }
+
+/* ================= personalización, tienda y recompensas ================= */
+.coinPill { margin-left: auto; background: linear-gradient(#ffe27a, var(--yellow)); color: var(--navy); border: 3px solid var(--navy); border-radius: 14px; padding: 4px 12px; font-weight: 800; font-size: 18px; white-space: nowrap; box-shadow: 0 3px 0 var(--navy); }
+.coinPill.big { font-size: 22px; }
+.menuBtn.big { background: linear-gradient(#ff9a4a, #ff6a3d); border-color: #fff; font-size: 19px; }
+.menuBtn { position: relative; }
+.menuBtn .badge { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: var(--red); color: #fff; border: 2px solid #fff; border-radius: 12px; min-width: 24px; height: 24px; font: 800 13px var(--font); display: flex; align-items: center; justify-content: center; font-style: normal; animation: pulse 1.2s infinite; }
+.menuRow { display: flex; gap: 8px; }
+.menuBtn.small { width: 101px; font-size: 14px; padding: 8px 10px; }
+body.panelOpen #lobby .leftMenu, body.panelOpen #lobby #partyPanel, body.panelOpen #lobby #playPanel, body.panelOpen #lobby .dragHint, body.panelOpen #lobby .legalLink { display: none; }
+.panel { position: fixed; inset: 0; z-index: 12; pointer-events: none; }
+.panel > * { pointer-events: auto; }
+.panel.center { background: rgba(10,18,40,.55); display: flex; align-items: center; justify-content: center; pointer-events: auto; backdrop-filter: blur(3px); }
+.panelLeft { position: absolute; left: 14px; top: 120px; bottom: 90px; width: 230px; background: var(--panel); border: 3px solid rgba(255,255,255,.2); border-radius: 20px; padding: 14px; overflow: auto; }
+.panelLeft h2, .shopHead h2 { margin: 0 0 10px; color: var(--yellow); -webkit-text-stroke: 1px var(--navy); font-size: 24px; }
+.cTab { display: flex; gap: 10px; align-items: center; width: 100%; text-align: left; font: 700 14px var(--font); color: #fff; background: transparent; border: 2px solid transparent; border-radius: 12px; padding: 8px 10px; cursor: pointer; margin-bottom: 4px; }
+.cTab span { font-size: 18px; width: 24px; text-align: center; }
+.cTab:hover { background: rgba(255,255,255,.1); }
+.cTab.active { background: var(--yellow); color: var(--navy); border-color: #fff; }
+.panelRight { position: absolute; right: 14px; top: 14px; bottom: 90px; width: min(520px, 42vw); background: var(--panel); border: 3px solid rgba(255,255,255,.2); border-radius: 20px; padding: 16px; overflow: auto; }
+.panelRight.wide { width: min(640px, 50vw); bottom: 14px; }
+.panelClose { position: absolute; top: 10px; right: 12px; background: var(--red); color: #fff; border: 3px solid #fff; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font: 700 16px var(--font); z-index: 2; }
+.panelBottom { position: absolute; left: 14px; right: 14px; bottom: 14px; height: 64px; display: flex; align-items: center; justify-content: flex-end; gap: 12px; background: var(--panel); border: 3px solid rgba(255,255,255,.2); border-radius: 18px; padding: 0 14px; }
+#customStatus { margin-right: auto; font-weight: 600; color: var(--muted); }
+.iGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.iCard { position: relative; background: rgba(255,255,255,.07); border: 3px solid color-mix(in srgb, var(--rc, #fff) 55%, transparent); border-radius: 16px; padding: 6px; cursor: pointer; transition: transform .12s, background .12s; display: flex; flex-direction: column; }
+.iCard:hover { transform: translateY(-3px); background: rgba(255,255,255,.14); }
+.iCard.equipped { border-color: var(--yellow); box-shadow: 0 0 0 3px var(--yellow); }
+.iThumb { position: relative; aspect-ratio: 1; border-radius: 11px; background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--rc, #9fd8ff) 45%, #ffffff), color-mix(in srgb, var(--rc, #3fa9f5) 70%, #1d2a4d)); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.iThumb.tall { aspect-ratio: 4/5; }
+.iThumb img { width: 100%; height: 100%; object-fit: cover; }
+.iCard.locked .iThumb img { filter: saturate(.55) brightness(.85); }
+.lockIc { position: absolute; top: 4px; right: 4px; font-size: 14px; background: rgba(0,0,0,.5); border-radius: 8px; padding: 1px 4px; }
+.eqIc { position: absolute; top: 4px; left: 4px; background: var(--yellow); color: var(--navy); border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 13px; }
+.noneIc { font-size: 44px; color: rgba(255,255,255,.5); }
+.iName { font-weight: 700; font-size: 13px; margin: 5px 2px 2px; line-height: 1.15; min-height: 30px; }
+.iMeta { display: flex; justify-content: space-between; gap: 4px; font-size: 11px; color: var(--muted); font-weight: 600; margin: 0 2px; }
+.iMeta .rar { text-transform: capitalize; }
+.cardBtn { margin-top: 6px; font: 800 12px var(--font); border: 2px solid var(--navy); border-radius: 9px; padding: 5px 4px; cursor: pointer; box-shadow: 0 2px 0 var(--navy); }
+.cardBtn.buy { background: linear-gradient(#ffe27a, var(--yellow)); color: var(--navy); }
+.cardBtn.buy[data-short] { filter: grayscale(.6); }
+.cardBtn.ad { background: linear-gradient(#8fd0ff, var(--blue)); color: #fff; }
+.cardBtn:disabled { opacity: .6; }
+.cardNote { margin-top: 6px; font-size: 11px; color: var(--muted); font-weight: 600; text-align: center; }
+#customGrid h4 { margin: 10px 0 6px; color: var(--yellow); }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.sw { width: 38px; height: 38px; border-radius: 50%; border: 3px solid rgba(255,255,255,.6); cursor: pointer; box-shadow: inset 0 -5px 0 rgba(0,0,0,.18); }
+.sw.active { border-color: var(--yellow); box-shadow: 0 0 0 3px var(--yellow); transform: scale(1.08); }
+.shopHead { display: flex; align-items: center; gap: 12px; padding-right: 44px; }
+#shopTabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+.sTab, .chip { font: 700 13px var(--font); color: #fff; background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.25); border-radius: 12px; padding: 6px 12px; cursor: pointer; }
+.sTab.active, .chip.active { background: var(--yellow); color: var(--navy); border-color: #fff; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.chip { font-size: 12px; padding: 4px 10px; }
+.previewLabel { position: absolute; left: 30%; transform: translateX(-50%); bottom: 22px; background: var(--panel); border: 2px solid #fff; border-radius: 12px; padding: 6px 14px; font-weight: 700; }
+.shopNote { position: absolute; left: 30%; transform: translateX(-50%); bottom: 58px; margin: 0; font-size: 12px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); white-space: nowrap; }
+.packs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.pack { position: relative; background: rgba(255,255,255,.08); border: 3px solid var(--yellow); border-radius: 16px; padding: 14px; text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.packIc { font-size: 44px; }
+.pack .bonus { position: absolute; top: -10px; right: -6px; background: var(--red); border: 2px solid #fff; border-radius: 10px; padding: 1px 8px; font-weight: 800; font-size: 12px; }
+.mission { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,.07); border: 3px solid rgba(255,255,255,.15); border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
+.mission.done { border-color: var(--green); }
+.mission.claimed { opacity: .55; }
+.mInfo { flex: 1; }
+.mBar { height: 12px; background: rgba(0,0,0,.35); border-radius: 8px; overflow: hidden; margin: 6px 0 3px; }
+.mBar div { height: 100%; background: linear-gradient(90deg, var(--green), #b6f5c6); }
+.mInfo small { color: var(--muted); font-weight: 600; }
+.mRew { font-weight: 700; font-size: 13px; text-align: right; line-height: 1.5; }
+.mState { font-weight: 700; color: var(--green); }
+.days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.day { position: relative; background: rgba(255,255,255,.07); border: 3px solid rgba(255,255,255,.15); border-radius: 14px; padding: 8px 4px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 12px; }
+.day img { width: 56px; height: 56px; border-radius: 10px; background: rgba(255,255,255,.15); }
+.dayIc { font-size: 34px; height: 56px; display: flex; align-items: center; }
+.day b { font-size: 11px; min-height: 14px; }
+.day small { color: var(--muted); font-weight: 700; }
+.day.today { border-color: var(--yellow); box-shadow: 0 0 0 3px var(--yellow); animation: pulse 1.4s infinite; }
+.day.got { opacity: .55; }
+.day i { position: absolute; top: 4px; right: 6px; color: var(--green); font-style: normal; font-weight: 900; }
+.dailyBtn { margin: 12px 0 18px; text-align: center; }
+#rewardsBody h4, #profileBody h4 { color: var(--yellow); margin: 12px 0 8px; }
+#rewardsBody h4 small { color: var(--muted); font-weight: 500; }
+.adRow { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,.07); border-radius: 14px; padding: 10px 14px; margin-bottom: 10px; }
+.adRow small { display: block; color: var(--muted); }
+.profTop { display: flex; gap: 16px; align-items: center; margin-bottom: 14px; }
+.profTop img { width: 120px; height: 150px; border-radius: 16px; background: radial-gradient(circle at 50% 40%, #a8e4ff, #3fa9f5); object-fit: cover; }
+.profTop h3 { margin: 0 0 6px; font-size: 24px; display: flex; gap: 8px; align-items: center; }
+.profTop p { margin: 8px 0 0; font-weight: 600; }
+.nextLv { display: flex; gap: 8px; flex-wrap: wrap; }
+.nl { background: rgba(255,255,255,.07); border-radius: 12px; padding: 6px 10px; display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.nl img { width: 40px; height: 40px; border-radius: 8px; background: rgba(255,255,255,.15); }
+.lobbyToast { position: fixed; top: 90px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--panel); border: 3px solid var(--yellow); border-radius: 14px; padding: 10px 18px; font-weight: 700; animation: slideIn .25s; transition: opacity .4s; }
+.lobbyToast.out { opacity: 0; }
+#levelup, #rewardPop { position: fixed; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: center; background: rgba(10,18,40,.7); overflow: hidden; }
+.lvRays { position: absolute; width: 200vmax; height: 200vmax; background: repeating-conic-gradient(rgba(255,210,63,.18) 0 10deg, transparent 10deg 20deg); animation: spin 14s linear infinite; }
+.lvBox { position: relative; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.lvBox.small { background: linear-gradient(#2c3e6e, var(--navy)); border: 4px solid #fff; border-radius: 24px; padding: 24px 30px; }
+.lvTitle { font: 900 88px var(--font); color: var(--yellow); -webkit-text-stroke: 4px var(--navy); text-shadow: 0 8px 0 rgba(0,0,0,.3); }
+.lvTitle.small { font-size: 36px; -webkit-text-stroke: 2px var(--navy); }
+#levelup.play .lvTitle { animation: lvPop .7s cubic-bezier(.2,1.8,.4,1); }
+#lvlRewards, #rewardItems { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.lvItem { background: var(--panel); border: 3px solid var(--yellow); border-radius: 18px; padding: 10px; width: 150px; display: flex; flex-direction: column; align-items: center; gap: 4px; animation: lvItem .5s backwards; }
+.lvItem:nth-child(2) { animation-delay: .15s; } .lvItem:nth-child(3) { animation-delay: .3s; } .lvItem:nth-child(4) { animation-delay: .45s; }
+.lvItem img { width: 110px; height: 110px; border-radius: 12px; background: radial-gradient(circle, #a8e4ff, #3fa9f5); }
+.lvItem small { color: var(--green); font-weight: 800; }
+.bigCoin { font-size: 72px; height: 110px; display: flex; align-items: center; }
+@keyframes lvPop { from { transform: scale(.2) rotate(-12deg); opacity: 0; } }
+@keyframes lvItem { from { transform: translateY(40px) scale(.6); opacity: 0; } }
+@media (max-width: 1100px) { .panelLeft { width: 190px; } .panelRight { width: 46vw; } }
+body.panelOpen #lobby .topRight { display: none; }
 </style>
 </head>
 <body>
@@ -314,6 +423,7 @@ th { color: var(--muted); font-size: 13px; }
         <div class="pname"><span id="pName">Jugador</span><button id="editName" class="iconBtn" title="Cambiar nombre">✎</button></div>
         <div class="plevel"><span class="lvl">NV <b id="pLevel">1</b></span><div class="xpbar"><div id="pXp"></div></div><small id="pXpText">0/400</small></div>
       </div>
+      <div class="coinPill" title="Monedas">🪙 <b id="coinCount">0</b></div>
     </div>
   </div>
   <div class="topRight">
@@ -322,10 +432,12 @@ th { color: var(--muted); font-size: 13px; }
   </div>
 
   <div class="leftMenu">
-    <button class="menuBtn" data-open="charsModal"><span>🧍</span>Personajes</button>
-    <button class="menuBtn" data-open="statsModal"><span>📊</span>Estadísticas</button>
-    <button class="menuBtn" data-open="settingsModal"><span>⚙</span>Configuración</button>
-    <button class="menuBtn" data-open="helpModal"><span>❔</span>Cómo jugar</button>
+    <button class="menuBtn big" id="mCustom"><span>🎨</span>Personalización</button>
+    <button class="menuBtn" id="mShop"><span>🛍️</span>Tienda</button>
+    <button class="menuBtn" id="mMissions"><span>🎯</span>Misiones<i class="badge hidden" id="mMissionsBadge"></i></button>
+    <button class="menuBtn" id="mRewards"><span>🎁</span>Recompensas<i class="badge dot hidden" id="mRewardsBadge">!</i></button>
+    <button class="menuBtn" id="mProfile"><span>👤</span>Perfil</button>
+    <div class="menuRow"><button class="menuBtn small" data-open="settingsModal"><span>⚙</span>Ajustes</button><button class="menuBtn small" data-open="helpModal"><span>❔</span>Ayuda</button></div>
   </div>
 
   <div id="partyPanel" class="card party">
@@ -439,18 +551,32 @@ th { color: var(--muted); font-size: 13px; }
 </div>
 
 <!-- ================= MODALES ================= -->
-<div id="charsModal" class="modalWrap hidden"><div class="modal wide">
-  <button class="close">✕</button>
-  <h2>Personajes</h2>
-  <p class="muted">Todos los personajes tienen exactamente las mismas estadísticas: solo cambia su aspecto. Sube de nivel para desbloquear más.</p>
-  <div id="charGrid"></div>
-</div></div>
+<!-- ================= PERSONALIZACIÓN ================= -->
+<div id="customPanel" class="panel side hidden">
+  <div class="panelLeft"><h2>Personalización</h2><div id="customTabs"></div></div>
+  <div class="panelRight"><button class="panelClose">✕</button><div id="customGrid"></div></div>
+  <div class="panelBottom"><span id="customStatus"></span><button id="customReset" class="btn small alt">Deshacer</button><button id="customSave" class="btn">💾 Guardar apariencia</button></div>
+</div>
 
-<div id="statsModal" class="modalWrap hidden"><div class="modal wide">
-  <button class="close">✕</button>
-  <h2>Estadísticas</h2>
-  <div id="statsBody"></div>
-</div></div>
+<!-- ================= TIENDA ================= -->
+<div id="shopPanel" class="panel side hidden">
+  <div class="panelRight wide"><button class="panelClose">✕</button>
+    <div class="shopHead"><h2>Tienda</h2><div class="coinPill big">🪙 <b id="shopCoins">0</b></div></div>
+    <div id="shopTabs"></div>
+    <div id="shopBody"></div>
+  </div>
+  <div class="previewLabel" id="shopPreview">Pulsa un artículo para probártelo</div>
+  <p class="shopNote">Todos los objetos son estéticos: no dan ventajas en las partidas.</p>
+</div>
+
+<!-- ================= MISIONES / RECOMPENSAS / PERFIL ================= -->
+<div id="missionsPanel" class="panel center hidden"><div class="modal wide"><button class="panelClose close">✕</button><h2>🎯 Misiones diarias</h2><div id="missionsBody"></div></div></div>
+<div id="rewardsPanel" class="panel center hidden"><div class="modal wide"><button class="panelClose close">✕</button><h2>🎁 Recompensas</h2><div id="rewardsBody"></div></div></div>
+<div id="profilePanel" class="panel center hidden"><div class="modal wide"><button class="panelClose close">✕</button><h2>👤 Perfil</h2><div id="profileBody"></div></div></div>
+
+<!-- ================= SUBIDA DE NIVEL / RECOMPENSA ================= -->
+<div id="levelup" class="hidden"><div class="lvRays"></div><div class="lvBox"><div class="lvTitle">¡NIVEL <span id="lvlNum">2</span>!</div><div id="lvlRewards"></div><button id="lvlOk" class="btn big">¡Genial!</button></div></div>
+<div id="rewardPop" class="hidden"><div class="lvBox small"><div class="lvTitle small" id="rewardTitle">Recompensa</div><div id="rewardItems"></div><button id="rewardOk" class="btn">Aceptar</button></div></div>
 
 <div id="helpModal" class="modalWrap hidden"><div class="modal wide">
   <button class="close">✕</button>
