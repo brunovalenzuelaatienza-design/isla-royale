@@ -4885,15 +4885,17 @@ var NAMES = [
   "Torbellino"
 ];
 var LEVELS = {
-  easy: { reaction: 0.75, aimError: 0.2, turn: 6, view: 30, think: 0.4, fireRangeK: 0.7, burst: 0.55, dodge: 0.25, jump: 0 },
-  normal: { reaction: 0.42, aimError: 0.1, turn: 10, view: 38, think: 0.28, fireRangeK: 0.85, burst: 0.8, dodge: 0.6, jump: 0.05 },
-  hard: { reaction: 0.22, aimError: 0.045, turn: 16, view: 46, think: 0.2, fireRangeK: 0.95, burst: 1, dodge: 0.9, jump: 0.12 }
+  // reaction: segundos hasta disparar tras ver a alguien · aimError: error de puntería (rad) · turn: velocidad de giro
+  // miss: probabilidad de un fallo claro por ráfaga · lead: cuánto anticipan el movimiento del objetivo
+  easy: { reaction: 1, aimError: 0.27, turn: 4.5, view: 26, think: 0.45, fireRangeK: 0.65, burst: 0.45, dodge: 0.2, jump: 0, miss: 0.35, lead: 0.2 },
+  normal: { reaction: 0.68, aimError: 0.17, turn: 6.5, view: 32, think: 0.32, fireRangeK: 0.78, burst: 0.65, dodge: 0.45, jump: 0.03, miss: 0.22, lead: 0.45 },
+  hard: { reaction: 0.45, aimError: 0.11, turn: 8.5, view: 37, think: 0.26, fireRangeK: 0.88, burst: 0.8, dodge: 0.7, jump: 0.06, miss: 0.12, lead: 0.65 }
 };
 var PERSONALITIES = {
-  aggressive: { fleeHp: 22, chaseTime: 9, coverPref: 0.15, lootGreed: 0.6, preferRange: 0.8 },
-  balanced: { fleeHp: 35, chaseTime: 5, coverPref: 0.4, lootGreed: 0.8, preferRange: 1 },
-  cautious: { fleeHp: 50, chaseTime: 2.5, coverPref: 0.75, lootGreed: 1, preferRange: 1.25 },
-  sniper: { fleeHp: 40, chaseTime: 3, coverPref: 0.6, lootGreed: 0.9, preferRange: 1.6, loves: "sniper" }
+  aggressive: { fleeHp: 28, chaseTime: 6, coverPref: 0.25, lootGreed: 0.7, preferRange: 0.85, investigate: 0.7 },
+  balanced: { fleeHp: 40, chaseTime: 3.5, coverPref: 0.45, lootGreed: 0.85, preferRange: 1.05, investigate: 0.45 },
+  cautious: { fleeHp: 55, chaseTime: 2, coverPref: 0.75, lootGreed: 1, preferRange: 1.3, investigate: 0.15 },
+  sniper: { fleeHp: 45, chaseTime: 2.5, coverPref: 0.6, lootGreed: 0.9, preferRange: 1.6, loves: "sniper", investigate: 0.3 }
 };
 var WEAPON_RANK = { pistol: 1, smg: 3.2, shotgun: 3.4, ar: 4.5, sniper: 3.6 };
 var IDEAL_DIST = { pistol: 13, smg: 11, shotgun: 5.5, ar: 18, sniper: 32 };
@@ -4965,6 +4967,8 @@ var BotController = class {
     this.blacklist = /* @__PURE__ */ new Set();
     this.lootSince = 0;
     this.lootRef = null;
+    this.flinch = 0;
+    this.leadK = this.L.lead;
     match.listeners.damaged.push((t, a) => this._onDamaged(t, a));
     match.listeners.shot.push((s) => this._onShot(s));
   }
@@ -4975,22 +4979,30 @@ var BotController = class {
     if (!this.alive || !attacker || attacker.team === this.p.team) return;
     const t = this.m.time;
     if (target === this.p) {
+      this.flinch = 0.5;
+      this.aimNoise += (Math.random() - 0.5) * 0.4;
+    }
+    const d = Math.hypot(attacker.x - this.p.x, attacker.y - this.p.y);
+    const guess = () => ({ x: attacker.x + (Math.random() - 0.5) * d * 0.5, y: attacker.y + (Math.random() - 0.5) * d * 0.5, t });
+    if (target === this.p) {
       this.lastThreatT = t;
-      if (!this.targetSeen || this.target && this.target.id !== attacker.id && Math.random() < 0.4) {
-        this.target = attacker;
-        this.lastSeen = { x: attacker.x, y: attacker.y, t };
+      if (!this.targetSeen || this.target && this.target.id !== attacker.id && Math.random() < 0.25) {
+        if (d < 30 || Math.random() < 0.5) {
+          this.target = attacker;
+          this.lastSeen = guess();
+        }
       }
-    } else if (target.team === this.p.team && Math.hypot(target.x - this.p.x, target.y - this.p.y) < 55) {
+    } else if (target.team === this.p.team && Math.hypot(target.x - this.p.x, target.y - this.p.y) < 40 && Math.random() < 0.6) {
       if (!this.targetSeen) {
         this.target = attacker;
-        this.lastSeen = { x: attacker.x, y: attacker.y, t };
+        this.lastSeen = guess();
       }
     }
   }
   _onShot(shooter) {
     if (!this.alive || shooter.team === this.p.team || this.targetSeen) return;
     const d = Math.hypot(shooter.x - this.p.x, shooter.y - this.p.y);
-    if (d < 42 && this.personalityName !== "cautious") this.investigate = { x: shooter.x + (Math.random() - 0.5) * 6, y: shooter.y + (Math.random() - 0.5) * 6, t: this.m.time };
+    if (d < 36 && Math.random() < this.P.investigate) this.investigate = { x: shooter.x + (Math.random() - 0.5) * 6, y: shooter.y + (Math.random() - 0.5) * 6, t: this.m.time };
   }
   // --------------------------------------------------------------- principal
   update(dt, playing) {
@@ -5025,12 +5037,18 @@ var BotController = class {
       const d = Math.hypot(t.x - p.x, t.y - p.y);
       const lead = def ? d / def.speed : 0;
       const tvx = t.vx || 0, tvy = t.vy || 0;
-      const px = t.x + tvx * lead * 0.8, py = t.y + tvy * lead * 0.8;
+      const px = t.x + tvx * lead * this.leadK, py = t.y + tvy * lead * this.leadK;
       this.onTargetT += dt;
       this.aimNoiseT -= dt;
+      if (this.flinch > 0) this.flinch -= dt;
       if (this.aimNoiseT <= 0) {
-        this.aimNoiseT = 0.25 + Math.random() * 0.35;
-        this.aimNoise = gauss() * this.L.aimError * Math.max(0.35, 1.4 - this.onTargetT * 0.3);
+        this.aimNoiseT = 0.3 + Math.random() * 0.4;
+        let err = gauss() * this.L.aimError * Math.max(0.55, 1.5 - this.onTargetT * 0.2);
+        if (Math.random() < this.L.miss) err += (Math.random() < 0.5 ? -1 : 1) * (0.12 + Math.random() * 0.15);
+        if (this.flinch > 0) err *= 1.8;
+        const lateral = Math.abs(-Math.sin(Math.atan2(t.y - p.y, t.x - p.x)) * tvx + Math.cos(Math.atan2(t.y - p.y, t.x - p.x)) * tvy);
+        err += gauss() * Math.min(0.12, lateral * 0.012);
+        this.aimNoise = err;
       }
       this.wantAngle = Math.atan2(py - p.y, px - p.x) + this.aimNoise;
     } else if (mv.x || mv.y) {
@@ -5055,9 +5073,9 @@ var BotController = class {
             this.firePulse = !this.firePulse;
             if (this.firePulse && p.fireCd <= 0) inp.b |= BTN.FIRE;
           }
-          if (this.burstT > 0.6 + this.L.burst * 1.2) {
+          if (this.burstT > 0.5 + this.L.burst * 1) {
             this.burstT = 0;
-            this.burstPause = (1 - this.L.burst) * 0.9 + Math.random() * 0.2;
+            this.burstPause = (1 - this.L.burst) * 1.1 + 0.15 + Math.random() * 0.35;
           }
         }
         if (def.id === "sniper" && d > 18) inp.b |= BTN.ADS;
@@ -5118,7 +5136,7 @@ var BotController = class {
       const def = WEAPONS[w.type];
       if (w.mag < def.mag * 0.6 && p.ammo[def.ammo] > 0 && p.reloading <= 0) m.startReload(p);
     }
-    if (this.target && this.lastSeen && t - this.lastSeen.t < this.P.chaseTime && this.target.alive && p.hp > 45 && hasAmmo) {
+    if (this.target && this.lastSeen && t - this.lastSeen.t < this.P.chaseTime && this.target.alive && p.hp > 55 && hasAmmo && Math.random() < 0.8) {
       this._setState("chase");
       return;
     }
@@ -5177,7 +5195,8 @@ var BotController = class {
       const view = t < 20 && t - this.lastThreatT > 3 ? 9 : this.L.view;
       if (d > view) continue;
       const ang = Math.abs(angDiff(Math.atan2(q.y - p.y, q.x - p.x), p.angle));
-      if (ang > 2.6 && d > 8) continue;
+      if (ang > 1.9 && d > 6) continue;
+      if (this.target !== q && d > 14 && Math.random() < 0.35 + d / 120) continue;
       if (raycast(m.map, p.x, p.y, q.x, q.y)) continue;
       let score = d - (this.target === q ? 8 : 0) + q.hp * 0.05;
       if (score < bestScore) {
@@ -5187,7 +5206,11 @@ var BotController = class {
     }
     const wasSeen = this.targetSeen;
     if (best) {
-      if (!wasSeen || this.target !== best) this.reactT = this.L.reaction * (0.8 + Math.random() * 0.5);
+      if (!wasSeen || this.target !== best) {
+        this.reactT = this.L.reaction * (0.8 + Math.random() * 0.6) + (best.id !== this.target?.id ? 0.15 : 0);
+        this.onTargetT = 0;
+        this.leadK = this.L.lead * (0.5 + Math.random() * 0.8);
+      }
       this.target = best;
       this.targetSeen = true;
       this.lastSeen = { x: best.x, y: best.y, t };
@@ -5612,7 +5635,7 @@ var Match = class {
   _pickBotLevel() {
     if (this.botLevel === "easy" || this.botLevel === "normal" || this.botLevel === "hard") return this.botLevel;
     const r = this.rng();
-    return r < 0.35 ? "easy" : r < 0.8 ? "normal" : "hard";
+    return r < 0.4 ? "easy" : r < 0.88 ? "normal" : "hard";
   }
   _addPlayer({ team, name, char, conn, profileId = null, spawn }) {
     const id = this.nextPlayerId++;

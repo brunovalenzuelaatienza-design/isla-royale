@@ -470,7 +470,7 @@ th { color: var(--muted); font-size: 13px; }
     <label class="row">Efectos <input type="range" id="sSfx" min="0" max="1" step="0.05"></label>
   </div>
   <div id="tControls" class="tabBody hidden">
-    <label class="row">Sensibilidad del ratón <input type="range" id="sSens" min="0.2" max="3" step="0.05"><output id="sSensOut"></output></label>
+    <label class="row">Sensibilidad del ratón <input type="range" id="sSens" min="0.1" max="3" step="0.05"><output id="sSensOut"></output></label>
     <label class="row">Invertir eje vertical <input type="checkbox" id="sInvert"></label>
     <div id="keyList"></div>
     <p class="muted">Ratón: clic izquierdo dispara · clic derecho apunta · rueda cambia de arma · Shift+rueda acerca/aleja la cámara · Esc pausa.</p>
@@ -479,6 +479,8 @@ th { color: var(--muted); font-size: 13px; }
   <div id="tCamera" class="tabBody hidden">
     <label class="row">Modo de cámara <select id="sCamMode"><option value="follow">Tercera persona: el ratón gira la cámara</option><option value="cursor">Vista elevada: apuntar con el cursor</option></select></label>
     <label class="row">Distancia de cámara <input type="range" id="sCamDist" min="0.7" max="1.5" step="0.05"></label>
+    <label class="row">Suavizado de cámara <input type="range" id="sCamSmooth" min="0" max="1" step="0.05"><output id="sCamSmoothOut"></output></label>
+    <p class="muted">En tercera persona: mueve el ratón para girar 360° y súbelo o bájalo para inclinar la cámara (desde casi a ras de suelo hasta vista desde arriba). El punto de mira queda fijo y apuntas adonde señala.</p>
     <label class="row">Campo de visión <input type="range" id="sFov" min="40" max="70" step="1"><output id="sFovOut"></output></label>
   </div>
 </div></div>
