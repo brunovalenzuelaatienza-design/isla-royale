@@ -1,0 +1,18 @@
+# Despliegue en Render (https://render.com): servicio web Node.js con WebSockets.
+services:
+  - type: web
+    name: isla-royale
+    runtime: node
+    plan: free            # cambia a "starter" (7 $/mes) para que no se duerma nunca
+    region: frankfurt
+    buildCommand: echo "sin dependencias"
+    startCommand: node server.mjs
+    healthCheckPath: /healthz
+    autoDeploy: true      # cada cambio subido a GitHub se publica solo
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: PROFILE_SECRET
+        generateValue: true
+      - key: MATCH_WAIT
+        value: "12"
