@@ -4021,10 +4021,21 @@ var ProfileStore = class _ProfileStore {
     bm.matches++;
     bm.kills += r.kills;
     if (r.won) bm.wins++;
+    this.pendingDouble = this.pendingDouble || /* @__PURE__ */ new Map();
+    if (!r.abandoned) this.pendingDouble.set(p.id, { xp, until: Date.now() + 10 * 60 * 1e3 });
     const after = levelFromXp(p.xp).level;
     const newChars = CHARACTERS.filter((c) => c.unlock > before && c.unlock <= after).map((c) => c.name);
     this.save();
     return { xp, breakdown, profile: this.publicView(p), placement: r.won ? 1 : r.placement, survived: r.survived, levelUp: after > before ? after : 0, newChars };
+  }
+  claimDouble(id) {
+    const p = this.get(id);
+    const pend = this.pendingDouble && this.pendingDouble.get(id);
+    if (!p || !pend || pend.until < Date.now()) return null;
+    this.pendingDouble.delete(id);
+    p.xp += pend.xp;
+    this.save();
+    return { bonus: pend.xp, profile: this.publicView(p) };
   }
   save() {
     if (this.saveTimer) return;
@@ -6591,6 +6602,8 @@ var __dirname = path2.dirname(fileURLToPath(import.meta.url));
 var ROOT = path2.resolve(__dirname, "..");
 var PORT = Number(process.env.PORT || process.argv[2] || 3e3);
 var WAIT = Number(process.env.MATCH_WAIT || 10);
+var ADS_CLIENT = /^ca-pub-\d{10,20}$/.test(process.env.ADSENSE_CLIENT || "") ? process.env.ADSENSE_CLIENT : "";
+var ADS_TEST = process.env.ADS_TEST === "1";
 var MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml", ".ico": "image/x-icon", ".woff2": "font/woff2" };
 var FLAT = fs2.existsSync(path2.join(__dirname, "index.html"));
 var STATIC = FLAT ? [{ prefix: "/", dir: __dirname }] : [
@@ -6614,6 +6627,15 @@ var server = http.createServer((req, res) => {
   try {
     let url = decodeURIComponent((req.url || "/").split("?")[0]);
     if (url === "/") url = "/index.html";
+    if (url === "/api/config") {
+      res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" });
+      return res.end(JSON.stringify({ adsClient: ADS_CLIENT, adsTest: ADS_TEST }));
+    }
+    if (url === "/ads.txt") {
+      res.writeHead(ADS_CLIENT ? 200 : 404, { "Content-Type": "text/plain" });
+      return res.end(ADS_CLIENT ? `google.com, ${ADS_CLIENT.replace(/^ca-/, "")}, DIRECT, f08c47fec0942fa0
+` : "");
+    }
     if (url === "/api/status" || url === "/healthz") {
       res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" });
       return res.end(JSON.stringify({ ok: true, ...mm.stats() }));
@@ -6734,6 +6756,11 @@ function handle(c, msg) {
     case "profile":
       c.sendJson({ t: "profile", profile: profiles.publicView(p) });
       break;
+    case "claimDouble": {
+      const r = profiles.claimDouble(p.id);
+      if (r) c.sendJson({ t: "doubled", bonus: r.bonus, profile: r.profile });
+      break;
+    }
     case "queue":
       if (c.state === "lobby") mm.queue(c, msg.mode, msg.bots);
       break;
