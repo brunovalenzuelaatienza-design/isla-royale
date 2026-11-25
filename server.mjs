@@ -7138,8 +7138,12 @@ var server = http.createServer((req, res) => {
   try {
     let url = decodeURIComponent((req.url || "/").split("?")[0]);
     if (url === "/") url = "/index.html";
+    if (req.method === "OPTIONS") {
+      res.writeHead(204, { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET", "Access-Control-Max-Age": "86400" });
+      return res.end();
+    }
     if (url === "/api/config") {
-      res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" });
+      res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" });
       return res.end(JSON.stringify({ adsClient: ADS_CLIENT, adsTest: ADS_TEST, payments: paymentsEnabled() }));
     }
     if (url === "/api/stripe/webhook" && req.method === "POST") {
@@ -7174,7 +7178,7 @@ var server = http.createServer((req, res) => {
 ` : "");
     }
     if (url === "/api/status" || url === "/healthz") {
-      res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" });
+      res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" });
       return res.end(JSON.stringify({ ok: true, ...mm.stats() }));
     }
     for (const s of STATIC) {
