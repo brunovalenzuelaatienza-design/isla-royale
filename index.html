@@ -2,7 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Isla Royale – Battle Royale online gratis en el navegador</title>
 <meta name="description" content="Isla Royale: battle royale 3D cartoon gratis para jugar en el navegador, sin descargas. Solo, Dúos o Escuadrones de hasta 15 jugadores contra amigos y bots. Juega ya desde Chrome o Edge.">
 <meta name="keywords" content="isla royale, battle royale online, battle royale navegador, juego multijugador gratis, juego io, jugar con amigos">
@@ -399,6 +402,193 @@ body.panelOpen #lobby .leftMenu, body.panelOpen #lobby #partyPanel, body.panelOp
 @keyframes lvItem { from { transform: translateY(40px) scale(.6); opacity: 0; } }
 @media (max-width: 1100px) { .panelLeft { width: 190px; } .panelRight { width: 46vw; } }
 body.panelOpen #lobby .topRight { display: none; }
+
+/* ================= móviles y tablets (controles táctiles) ================= */
+:root { --safeL: env(safe-area-inset-left, 0px); --safeR: env(safe-area-inset-right, 0px); --safeT: env(safe-area-inset-top, 0px); --safeB: env(safe-area-inset-bottom, 0px); }
+.touchOnly { display: none !important; }
+body.touch .touchOnly { display: inline-flex !important; }
+body.touch .desktopOnly { display: none !important; }
+body.touch { position: fixed; inset: 0; overflow: hidden; touch-action: none; overscroll-behavior: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+body.touch input, body.touch textarea { -webkit-user-select: text; user-select: text; touch-action: manipulation; }
+body.touch .modal, body.touch .panelLeft, body.touch .panelRight, body.touch #sbInfo, body.touch .resBox { touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+body.touch #game { touch-action: none; }
+
+/* controles en partida */
+#touchUI { position: fixed; inset: 0; z-index: 4; pointer-events: none; --tOp: .75; }
+#touchUI .tZone { position: absolute; pointer-events: auto; touch-action: none; }
+#t_joyZone { left: 0; bottom: 0; width: 42%; height: 74%; }
+#t_lookZone { right: 0; top: 0; width: 58%; height: 100%; }
+.tJoy { position: absolute; border-radius: 50%; background: rgba(23,34,66,.3); border: 3px solid rgba(255,255,255,.5); opacity: calc(var(--tOp) * .8); pointer-events: none; }
+.tJoy .tKnob { position: absolute; left: 27%; top: 27%; width: 46%; height: 46%; border-radius: 50%; background: rgba(255,255,255,.9); box-shadow: 0 3px 10px rgba(0,0,0,.35); }
+.tJoy.active { opacity: 1; }
+.tJoy.run { border-color: var(--yellow); }
+.tJoy.run .tKnob { background: var(--yellow); }
+.tBtn { position: absolute; pointer-events: auto; touch-action: none; border-radius: 50%; border: 3px solid rgba(255,255,255,.75); background: rgba(23,34,66,.55); color: #fff; opacity: var(--tOp); display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .08s; }
+.tBtn svg { width: 56%; height: 56%; pointer-events: none; }
+.tBtn.pressed { background: rgba(255,210,63,.85); color: var(--navy); scale: .93; }
+.tBtn.on { background: var(--yellow); color: var(--navy); border-color: #fff; opacity: 1; }
+#t_fire, #t_fireL { background: rgba(229,59,64,.62); }
+#t_fire.pressed, #t_fireL.pressed { background: rgba(255,120,120,.95); color: #fff; }
+.tBtn.off { display: none; }
+.tBtn.pill { border-radius: 999px; padding: 0 18px 0 12px; gap: 8px; font: 700 15px var(--font); display: none; max-width: 42vw; white-space: nowrap; overflow: hidden; background: rgba(23,34,66,.88); opacity: 1; border-color: var(--yellow); }
+.tBtn.pill span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.tBtn.pill.show { display: flex; }
+.tPickIc { font-size: 22px; }
+.tBtn.small { width: 44px; height: 44px; opacity: .9; }
+.tBtn.small svg { width: 60%; height: 60%; }
+#t_pause { top: calc(8px + var(--safeT)); right: calc(10px + var(--safeR)); }
+#t_map { top: calc(8px + var(--safeT)); right: calc(62px + var(--safeR)); }
+#t_map.on { background: var(--yellow); color: var(--navy); }
+#t_next { display: none; }
+#touchUI.dead .tBtn:not(.small), #touchUI.dead .tJoy, #touchUI.dead #t_joyZone { display: none; }
+#touchUI.dead #t_next { display: flex; left: 50%; bottom: 150px; width: 60px; height: 60px; transform: translateX(-50%); }
+body.touch #pause { z-index: 31; }
+
+/* editor de posiciones */
+#touchEditor { position: fixed; inset: 0; z-index: 50; background: rgba(10,18,40,.6); }
+#touchEditor #touchUI { z-index: 51; }
+#touchEditor .tBtn { opacity: 1; border-style: dashed; }
+#touchEditor .tBtn.off { display: flex; opacity: .5; }
+.teBar { position: absolute; top: calc(10px + var(--safeT)); left: 50%; transform: translateX(-50%); z-index: 52; display: flex; gap: 10px; align-items: center; background: var(--panel); border: 3px solid #fff; border-radius: 16px; padding: 8px 12px; font-weight: 600; font-size: 14px; max-width: 94vw; }
+
+/* aviso de girar el móvil */
+#rotateHint { display: none; position: fixed; inset: 0; z-index: 100; background: radial-gradient(circle at 50% 35%, #a8e4ff, #3fa9f5 70%, #2a7fd0); flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 30px; font: 800 22px var(--font); color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.3); }
+.rotIc { font-size: 72px; animation: rotPhone 1.8s ease-in-out infinite; }
+@keyframes rotPhone { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+@media (orientation: portrait) { body.touch:not(.tablet) #rotateHint { display: flex; } }
+
+/* HUD en móvil */
+body.touch .hudTL { top: calc(8px + var(--safeT)); left: calc(8px + var(--safeL)); }
+body.touch #minimap { width: 104px; height: 104px; pointer-events: auto; }
+body.touch #team { position: absolute; left: 110px; top: 0; width: 124px; gap: 3px; margin-top: 0; }
+body.touch .mate { font-size: 11px; padding: 3px 6px; }
+body.touch .hudTop { top: calc(6px + var(--safeT)); gap: 5px; }
+body.touch .pill { padding: 3px 8px; font-size: 11px; border-width: 2px; border-radius: 10px; }
+body.touch .pill b { font-size: 15px; }
+body.touch .pill.pmode b { font-size: 12px; }
+body.touch #zoneInfo { top: calc(40px + var(--safeT)); font-size: 11px; padding: 3px 10px; }
+body.touch #killfeed { top: calc(60px + var(--safeT)); right: calc(10px + var(--safeR)); }
+body.touch .kf { font-size: 11px; padding: 3px 8px; }
+body.touch #toasts { top: 30%; right: calc(10px + var(--safeR)); }
+body.touch .toast { font-size: 12px; padding: 4px 10px; }
+body.touch .hudBL { left: 50%; bottom: 66px; transform: translateX(-50%); }
+body.touch .hpIcon { width: 24px; height: 24px; font-size: 15px; border-width: 2px; }
+body.touch .hpBar { width: 180px; height: 18px; border-width: 2px; border-radius: 10px; }
+body.touch #hpText { font-size: 12px; }
+body.touch .hudBottom { bottom: calc(6px + var(--safeB)); gap: 4px; }
+body.touch .slots { gap: 5px; }
+body.touch .slot { width: 88px; padding: 3px 7px; border-width: 2px; border-radius: 10px; pointer-events: auto; }
+body.touch .slot.active { transform: translateY(-3px); }
+body.touch .slot kbd, body.touch .item kbd { display: none; }
+body.touch .sname { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+body.touch .sammo b { font-size: 16px; }
+body.touch .sammo span { font-size: 11px; }
+body.touch .item { width: 46px; border-width: 2px; border-radius: 10px; pointer-events: auto; }
+body.touch .item .iic { font-size: 15px; }
+body.touch .item b { font-size: 13px; }
+body.touch #progress { width: 170px; font-size: 11px; padding: 3px 8px; position: absolute; bottom: 92px; }
+body.touch #prompt { display: none !important; }
+body.touch #spectate { bottom: 70px; font-size: 13px; padding: 6px 10px; }
+body.touch #spectate kbd { display: none; }
+body.touch #scoreboard { inset: calc(8px + var(--safeT)) calc(60px + var(--safeR)) 8px calc(8px + var(--safeL)); padding: 10px; gap: 10px; border-radius: 14px; }
+body.touch #bigmap { width: min(340px, 80vh); height: min(340px, 80vh); }
+body.touch .sbHead { font-size: 14px; gap: 10px; }
+body.touch #sbInfo { font-size: 12px; }
+body.touch .announce { font-size: 22px; top: 24%; }
+body.touch .announce.big { font-size: 44px; }
+body.touch .announce.count { font-size: 70px; }
+body.touch .announce.kill { font-size: 26px; }
+body.touch .announce.zone { font-size: 20px; }
+body.touch #fps { font-size: 10px; }
+
+/* lobby y menús en pantallas bajas (móvil en horizontal) */
+@media (max-height: 560px) {
+  .topLeft { top: calc(8px + var(--safeT)); left: calc(8px + var(--safeL)); }
+  .topRight { top: calc(8px + var(--safeT)); right: calc(8px + var(--safeR)); gap: 6px; }
+  #profileCard { min-width: 0; gap: 8px; padding: 6px 10px; }
+  .avatar { width: 38px; height: 38px; }
+  .pname { font-size: 15px; }
+  .xpbar { width: 90px; }
+  .conn { padding: 6px 10px; font-size: 12px; }
+  .conn small { display: none; }
+  .coinPill { font-size: 15px; padding: 2px 9px; }
+  .leftMenu { top: calc(70px + var(--safeT)); left: calc(8px + var(--safeL)); gap: 5px; }
+  .menuBtn { width: 150px; font-size: 13px; padding: 6px 10px; border-width: 2px; border-radius: 11px; }
+  .menuBtn span { font-size: 15px; }
+  .menuBtn.big { font-size: 14px; }
+  .menuBtn.small { width: 72px; font-size: 12px; padding: 6px 6px; }
+  .menuBtn .badge { min-width: 18px; height: 18px; font-size: 11px; right: 6px; }
+  .party { top: calc(62px + var(--safeT)); right: calc(8px + var(--safeR)); width: 220px; padding: 8px 10px; font-size: 13px; max-height: calc(100vh - 230px); max-height: calc(100dvh - 230px); overflow-y: auto; }
+  .member { padding: 3px 6px; margin-bottom: 4px; font-size: 12px; }
+  .codeRow { font-size: 13px; margin-bottom: 4px; }
+  .inviteBtn { margin-bottom: 4px; font-size: 12px; padding: 5px 8px; }
+  .privRow { margin: 2px 0 4px; font-size: 12px; }
+  .party h3 { font-size: 15px; margin-bottom: 4px; }
+  .party p { display: none; }
+  .joinRow { margin: 4px 0; }
+  .joinRow input { font-size: 14px; padding: 4px 8px; }
+  #playPanel { right: calc(8px + var(--safeR)); bottom: calc(8px + var(--safeB)); width: 300px; gap: 6px; }
+  .mode { padding: 5px 2px; border-width: 2px; border-radius: 11px; }
+  .mode b { font-size: 12px; } .mode small { font-size: 9px; }
+  .btn.play { font-size: 30px; padding: 7px; border-radius: 16px; box-shadow: 0 5px 0 var(--navy); }
+  .botRow { font-size: 12px; }
+  .dragHint { bottom: 8px; font-size: 12px; }
+  .legalLink { bottom: 4px; left: calc(10px + var(--safeL)); font-size: 10px; }
+  #queueInfo { padding: 8px; gap: 8px; border-radius: 14px; }
+  .logo .l1 { font-size: 40px; -webkit-text-stroke-width: 3px; }
+  .logo .l2 { font-size: 62px; -webkit-text-stroke-width: 4px; }
+  #boot { gap: 10px; }
+  .btn.big { font-size: 20px; padding: 10px 28px; }
+  .modal { padding: 14px 16px; max-height: calc(100vh - 16px); max-height: calc(100dvh - 16px); border-width: 3px; border-radius: 16px; }
+  .modal.wide { width: min(860px, calc(100vw - 20px)); }
+  .modal h2 { font-size: 22px; margin-bottom: 8px; }
+  .modal .close { top: 8px; right: 10px; width: 32px; height: 32px; }
+  .row { padding: 5px 2px; font-size: 14px; }
+  .tabs { flex-wrap: wrap; }
+  .help { grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; }
+  .panelLeft { top: calc(62px + var(--safeT)); left: calc(8px + var(--safeL)); bottom: 72px; width: 170px; padding: 8px; border-radius: 14px; }
+  .panelLeft h2, .shopHead h2 { font-size: 18px; }
+  .cTab { font-size: 12px; padding: 6px 8px; }
+  .panelRight { top: calc(8px + var(--safeT)); right: calc(8px + var(--safeR)); bottom: 72px; width: min(440px, 52vw); padding: 10px; border-radius: 14px; }
+  .panelRight.wide { width: min(560px, 62vw); bottom: 8px; }
+  .panelBottom { left: calc(8px + var(--safeL)); right: calc(8px + var(--safeR)); bottom: 8px; height: 56px; border-radius: 14px; }
+  .iGrid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 7px; }
+  .panelClose { width: 32px; height: 32px; top: 6px; right: 8px; }
+  .resBox { padding: 12px 16px; max-height: calc(100vh - 16px); max-height: calc(100dvh - 16px); overflow: auto; border-radius: 18px; }
+  .resTitle { font-size: 44px; } .resTitle.defeat { font-size: 38px; }
+  .resSub { font-size: 14px; margin-bottom: 8px; }
+  .resGrid b { font-size: 22px; } .resGrid div { padding: 6px; }
+  .resCols { gap: 10px; margin-top: 8px; font-size: 13px; }
+  .resBtns { margin-top: 10px; gap: 8px; flex-wrap: wrap; }
+  .resBtns .btn { font-size: 14px; padding: 7px 12px; }
+}
+@media (max-height: 560px) {
+  .shopNote { display: none; }
+  .previewLabel { left: 24%; bottom: 10px; font-size: 12px; padding: 4px 10px; max-width: 40vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #results { align-items: flex-start; padding: 8px 0; overflow: auto; }
+  .resBox { margin: 0 auto; }
+  .resTitle { line-height: 1; }
+  .boardRow:nth-child(n+6) { display: none; }
+  .boardRow { padding: 2px 8px; }
+  .xpLine { padding: 1px 0; }
+  #resLevel { margin-top: 4px; }
+}
+@media (max-width: 760px) {
+  body.touch #team { width: 112px; }
+  body.touch .mate { font-size: 10px; padding: 2px 5px; }
+  body.touch .hudTop { left: calc(240px + var(--safeL)); transform: none; }
+  body.touch #zoneInfo { left: calc(240px + var(--safeL)); transform: none; }
+  body.touch .pill .ic, body.touch .pill small { display: none; }
+  body.touch .slot { width: 76px; }
+  body.touch .item { width: 40px; }
+  body.touch .hpBar { width: 150px; }
+}
+@media (max-height: 560px) and (max-width: 700px) {
+  .inviteBtn { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .menuBtn { width: 128px; }
+  #playPanel { width: 250px; }
+  .party { width: 190px; }
+}
 </style>
 </head>
 <body>
@@ -597,7 +787,7 @@ body.panelOpen #lobby .topRight { display: none; }
 <div id="settingsModal" class="modalWrap hidden"><div class="modal wide">
   <button class="close">✕</button>
   <h2>Configuración</h2>
-  <div class="tabs"><button class="tab active" data-tab="tGraphics">Gráficos</button><button class="tab" data-tab="tSound">Sonido</button><button class="tab" data-tab="tControls">Controles</button><button class="tab" data-tab="tCamera">Cámara</button></div>
+  <div class="tabs"><button class="tab active" data-tab="tGraphics">Gráficos</button><button class="tab" data-tab="tSound">Sonido</button><button class="tab desktopOnly" data-tab="tControls">Controles</button><button class="tab" data-tab="tCamera">Cámara</button><button class="tab touchOnly" data-tab="tTouch">Móvil</button></div>
   <div id="tGraphics" class="tabBody">
     <label class="row">Idioma / Language <select id="sLang"><option value="en">English</option><option value="es">Español</option></select></label>
     <label class="row">Calidad gráfica <select id="sQuality"><option value="low">Baja (equipos modestos)</option><option value="medium">Media</option><option value="high">Alta</option></select></label>
@@ -617,8 +807,19 @@ body.panelOpen #lobby .topRight { display: none; }
     <p class="muted">Ratón: clic izquierdo dispara · clic derecho apunta · rueda cambia de arma · Shift+rueda acerca/aleja la cámara · Esc pausa.</p>
     <button id="resetKeys" class="btn small alt">Restablecer controles</button>
   </div>
+  <div id="tTouch" class="tabBody hidden">
+    <label class="row">Sensibilidad de la cámara <input type="range" id="sTSens" min="0.3" max="3" step="0.05"><output id="sTSensOut"></output></label>
+    <label class="row">Tamaño de los botones <input type="range" id="sTSize" min="0.7" max="1.4" step="0.05"><output id="sTSizeOut"></output></label>
+    <label class="row">Opacidad de los controles <input type="range" id="sTOp" min="0.2" max="1" step="0.05"><output id="sTOpOut"></output></label>
+    <label class="row">Ayuda de apuntado <input type="checkbox" id="sTAssist"></label>
+    <label class="row">Correr al llevar el joystick al borde <input type="checkbox" id="sTAutoRun"></label>
+    <label class="row">Apuntar: tocar para activar y desactivar <input type="checkbox" id="sTAdsToggle"></label>
+    <label class="row">Segundo botón de disparo a la izquierda <input type="checkbox" id="sTLeftFire"></label>
+    <button id="sTEdit" class="btn small">✥ Cambiar la posición de los botones</button>
+    <p class="muted">Joystick: toca y arrastra en la mitad izquierda. Cámara: desliza el dedo en la mitad derecha o mientras mantienes el botón de disparo.</p>
+  </div>
   <div id="tCamera" class="tabBody hidden">
-    <label class="row">Modo de cámara <select id="sCamMode"><option value="follow">Tercera persona: el ratón gira la cámara</option><option value="cursor">Vista elevada: apuntar con el cursor</option></select></label>
+    <label class="row desktopOnly">Modo de cámara <select id="sCamMode"><option value="follow">Tercera persona: el ratón gira la cámara</option><option value="cursor">Vista elevada: apuntar con el cursor</option></select></label>
     <label class="row">Distancia de cámara <input type="range" id="sCamDist" min="0.7" max="1.5" step="0.05"></label>
     <label class="row">Suavizado de cámara <input type="range" id="sCamSmooth" min="0" max="1" step="0.05"><output id="sCamSmoothOut"></output></label>
     <p class="muted">En tercera persona: mueve el ratón para girar 360° y súbelo o bájalo para inclinar la cámara (desde casi a ras de suelo hasta vista desde arriba). El punto de mira queda fijo y apuntas adonde señala.</p>
@@ -636,5 +837,6 @@ body.panelOpen #lobby .topRight { display: none; }
 <div id="fps" class="hidden"></div>
 
 <script type="module" src="/app.js"></script>
+<div id="rotateHint"><div class="rotIc">📱</div><p>Gira el móvil para jugar en horizontal</p></div>
 </body>
 </html>
