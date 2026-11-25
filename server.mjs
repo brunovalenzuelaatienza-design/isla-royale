@@ -4076,6 +4076,48 @@ function log(...args) {
 var MIN_AD_MS = 5e3;
 var AD_TOKEN_TTL = 10 * 60 * 1e3;
 var START_COINS = 150;
+var BAD = [
+  "puta",
+  "puto",
+  "mierda",
+  "cabron",
+  "gilipolla",
+  "maricon",
+  "polla",
+  "zorra",
+  "follar",
+  "joder",
+  "hostia",
+  "pendej",
+  "verga",
+  "culero",
+  "negrata",
+  "sudaca",
+  "nazi",
+  "hitler",
+  "fuck",
+  "shit",
+  "bitch",
+  "cunt",
+  "dick",
+  "pussy",
+  "nigg",
+  "nigga",
+  "fag",
+  "retard",
+  "whore",
+  "slut",
+  "rape",
+  "porn",
+  "sexo",
+  "sexy",
+  "kys",
+  "killyourself"
+];
+function isOffensive(name) {
+  const norm = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/0/g, "o").replace(/1/g, "i").replace(/3/g, "e").replace(/4/g, "a").replace(/5/g, "s").replace(/7/g, "t").replace(/[^a-zñ]/g, "");
+  return BAD.some((w) => norm.includes(w.normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
+}
 var ProfileStore = class _ProfileStore {
   constructor(dir) {
     this.dir = dir;
@@ -4167,7 +4209,7 @@ var ProfileStore = class _ProfileStore {
   }
   static sanitizeName(name) {
     let n = String(name || "").replace(/[^\p{L}\p{N}_\- ]/gu, "").trim().slice(0, 16);
-    if (n.length < 2) n = "Jugador" + Math.floor(Math.random() * 9e3 + 1e3);
+    if (n.length < 2 || isOffensive(n)) n = "Jugador" + Math.floor(Math.random() * 9e3 + 1e3);
     return n;
   }
   create(name) {
