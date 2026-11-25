@@ -589,6 +589,31 @@ body.touch #fps { font-size: 10px; }
   #playPanel { width: 250px; }
   .party { width: 190px; }
 }
+
+/* pantallas muy bajas (móvil con barras del portal, iframes pequeños) */
+@media (max-height: 420px) {
+  .bootHint { display: none; }
+  .logo .l1 { font-size: 28px; } .logo .l2 { font-size: 44px; }
+  #boot { gap: 8px; }
+  .bootBar { height: 12px; }
+  .btn.big { font-size: 16px; padding: 7px 20px; }
+  #profileCard { padding: 4px 8px; }
+  .avatar { width: 30px; height: 30px; }
+  .pname { font-size: 13px; }
+  .plevel { margin-top: 1px; }
+  .leftMenu { top: calc(52px + var(--safeT)); gap: 3px; max-height: calc(100vh - 60px); max-height: calc(100dvh - 60px); overflow-y: auto; }
+  .menuBtn { padding: 4px 8px; font-size: 12px; }
+  .menuBtn span { font-size: 13px; }
+  .party { top: calc(48px + var(--safeT)); padding: 6px 8px; max-height: calc(100vh - 150px); max-height: calc(100dvh - 150px); }
+  .party h3 { font-size: 13px; margin-bottom: 2px; }
+  #playPanel { gap: 4px; }
+  .botRow { display: none; }
+  .mode { padding: 2px; }
+  .mode small { display: none; }
+  .btn.play { font-size: 22px; padding: 4px; letter-spacing: 2px; box-shadow: 0 4px 0 var(--navy); }
+  .dragHint { display: none; }
+  .conn { padding: 4px 8px; }
+}
 </style>
 </head>
 <body>
