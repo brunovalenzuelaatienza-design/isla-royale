@@ -7113,6 +7113,7 @@ var __dirname = path2.dirname(fileURLToPath(import.meta.url));
 var ROOT = path2.resolve(__dirname, "..");
 var PORT = Number(process.env.PORT || process.argv[2] || 3e3);
 var WAIT = Number(process.env.MATCH_WAIT || 10);
+var PORTAL_ADS = /* @__PURE__ */ new Set(["crazygames", "poki"]);
 var ADS_CLIENT = /^ca-pub-\d{10,20}$/.test(process.env.ADSENSE_CLIENT || "") ? process.env.ADSENSE_CLIENT : "";
 var ADS_TEST = process.env.ADS_TEST === "1";
 var MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".json": "application/json", ".png": "image/png", ".svg": "image/svg+xml", ".ico": "image/x-icon", ".woff2": "font/woff2" };
@@ -7303,7 +7304,7 @@ function handle(c, msg) {
       econ(c, p, profiles.claimDaily(p.id));
       break;
     case "adStart": {
-      if (!ADS_CLIENT) {
+      if (!ADS_CLIENT && !PORTAL_ADS.has(String(msg.via))) {
         c.sendJson({ t: "error", msg: "Los anuncios a\xFAn no est\xE1n activados en este servidor." });
         break;
       }

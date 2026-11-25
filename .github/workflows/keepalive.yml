@@ -1,0 +1,12 @@
+name: Mantener servidor despierto
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Ping /healthz
+        run: curl -fsS --max-time 90 --retry 2 https://isla-royale-3b1i.onrender.com/healthz || true
